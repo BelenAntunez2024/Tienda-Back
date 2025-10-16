@@ -3,8 +3,8 @@ import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity('Cliente')
 export class Cliente {
-    @PrimaryColumn({ name: 'ID_usuario', type: 'uuid'  })
-    ID_usuario: string; 
+    @PrimaryColumn({ name: 'ID_usuario', type: 'int' }) 
+    id_usuario: number;
 
     @Column()
     Nombre: string;
@@ -21,6 +21,8 @@ export class Cliente {
  
     //lado dueño de la relación(por tener la FK)
     @OneToOne(() => Usuario, (usuario) => usuario.cliente)
-    @JoinColumn({ name: "ID_usuario" }) // FK en Cliente
+    @JoinColumn({ name: "ID_usuario", // FK en Cliente
+        referencedColumnName: "Id_usuario"
+     }) 
     usuario: Usuario;
 }
