@@ -1,33 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
 import { ProductoService } from './producto.service';
 import { ProductoDto } from './dto/producto.dto';
+import { Producto } from './entities/producto.entity';
 
 @Controller('producto')
 export class ProductoController {
   constructor(private readonly productoService: ProductoService) {}
 
-  @Post()
-  create(@Body() productoDto: ProductoDto) {
-    return this.productoService.create(productoDto);
-  }
-
   @Get()
-  findAll() {
+  async findAll(): Promise<Producto[]> {
     return this.productoService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productoService.findOne(+id);
+  @Get(':id') //el param es para obtener el id de la url
+  async findOne(@Param('id') id: number): Promise<Producto | null> {
+    return this.productoService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() productoDto: ProductoDto) {
-    return this.productoService.update(+id, productoDto);
+  //el post es para crear nuevos recursos
+  @Post()
+  async create(@Body() productoDto: ProductoDto) {
+    return this.productoService.create(productoDto);
+  }
+
+  //el patch es para actualizaciones parciales
+  @Patch(':id') //el body es para obtener los datos del cuerpo de la peticion
+  async update(@Param('id') id: number, @Body(new ValidationPipe({transform: true})) productoDto: ProductoDto): Promise<Producto> { //el ValidationPipe es para validar y transformar los datos entrantes - el transform: true es para transformar el id de string a number
+    return this.productoService.update(id, productoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productoService.remove(+id);
+  async remove(@Param('id') id: number) {
+    return this.productoService.remove(id);
   }
 }
