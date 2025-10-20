@@ -1,5 +1,6 @@
+import { Ordenes } from 'src/ordenes/entities/ordenes.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
-import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity('Cliente')
 export class Cliente {
@@ -25,4 +26,7 @@ export class Cliente {
         referencedColumnName: "Id_usuario"
      }) 
     usuario: Usuario;
+
+    @OneToMany(() => Ordenes, (orden) => orden.cliente)
+    ordenes: Ordenes[];
 }
