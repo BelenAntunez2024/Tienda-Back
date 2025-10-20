@@ -18,6 +18,9 @@ export class Usuario {
     @Column({type: 'date', nullable: true })
     fechaNacimiento: Date
 
+    @Column({nullable: true})
+    foto: string;
+
 
     @OneToMany(() => Correo, (correo) => correo.usuario)
     correos: Correo[]

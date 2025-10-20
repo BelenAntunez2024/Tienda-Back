@@ -1,26 +1,36 @@
-import { Injectable } from '@nestjs/common';
-
-import {UsuarioDto } from './dto/usuario.dto';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Usuario } from './entities/usuario.entity';
 
 @Injectable()
-export class UsuariosService {
-  create(UsuarioDto: UsuarioDto) {
-    return 'This action adds a new usuario';
-  }
+export class UsuarioService {
+  constructor(
+    @InjectRepository(Usuario)
+    private readonly usuariosRepository: Repository<Usuario>,
+  ) {}
 
-  findAll() {
-    return `This action returns all usuarios`;
-  }
+  async actualizarPerfil(id: number, datos: Partial<Usuario>): Promise<Usuario> {
+    const usuario = await this.usuariosRepository.findOneBy({ Id_usuario : id });
+    if (!usuario) throw new NotFoundException('Usuario no encontrado');
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
-  }
+    // Validaciones básicas
+    if (datos.nombreCompleto && datos.nombreCompleto.trim() === '') {
+      throw new BadRequestException('El nombre no puede estar vacío');
+    }
 
-  update(id: number, UsuarioDto: UsuarioDto) {
-    return `This action updates a #${id} usuario`;
-  }
+    if (datos.contraseña && datos.contraseña.length < 6) {
+      throw new BadRequestException('La contraseña debe tener al menos 6 caracteres');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+    // Encriptar contraseña si se actualiza
+    /*if (datos.contraseña) {
+      datos.contraseña = await bcrypt.hash(datos.contraseña, 10);
+    }*/
+
+    // Actualizar los campos que vengan en el body
+    Object.assign(usuario, datos);
+
+    return this.usuariosRepository.save(usuario);
   }
 }

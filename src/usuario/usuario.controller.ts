@@ -1,33 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UsuariosService } from './usuario.service';
-import { UsuarioDto } from './dto/usuario.dto';
+import { Controller, Put, Body, Param } from '@nestjs/common';
+import { UsuarioService } from './usuario.service';
+import { Usuario } from './entities/usuario.entity';
 
-@Controller('usuarios')
-export class UsuariosController {
-  constructor(private readonly usuariosService: UsuariosService) {}
 
-  @Post()
-  create(@Body() UsuarioDto: UsuarioDto) {
-    return this.usuariosService.create(UsuarioDto);
-  }
+@Controller('usuario')
+export class UsuarioController {
+  constructor(private readonly usuarioService: UsuarioService) {}
 
-  @Get()
-  findAll() {
-    return this.usuariosService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usuariosService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsuarioDto: UsuarioDto) {
-    return this.usuariosService.update(+id, updateUsuarioDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usuariosService.remove(+id);
+  @Put(':id')
+  async actualizarPerfil(@Param('id') id: number, @Body() datos: Partial<Usuario>){
+    const usuarioActualizado = await this.usuarioService.actualizarPerfil(id, datos);
+    return{
+      mensaje: 'Perfil actualizado correctamente',
+      usuario: usuarioActualizado
+    }
   }
 }
+
+
+
+
+  
