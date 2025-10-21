@@ -1,4 +1,5 @@
 import { Cliente } from 'src/cliente/entities/cliente.entity';
+import { ItemOrden } from 'src/item-ordenes/entities/item-ordene.entity';
 //import { ItemOrden } from 'src/item-ordenes/entities/item-ordenes.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -17,6 +18,6 @@ export class Ordenes {
     @JoinColumn({ name: "ID_usuario" }) 
     cliente: Cliente;
 
-//   @OneToMany(() => ItemOrden, itemOrden => itemOrden.orden)
-  // itemOrdenes: ItemOrden[];
+    @OneToMany(() => ItemOrden, itemOrden => itemOrden.orden)
+    itemOrdenes: ItemOrden[];
 }

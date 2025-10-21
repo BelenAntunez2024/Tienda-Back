@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { OrdenesService } from './ordenes.service';
 import { CreateOrdeneDto } from './dto/create-ordene.dto';
 import { UpdateOrdeneDto } from './dto/update-ordene.dto';
@@ -13,8 +13,13 @@ export class OrdenesController {
   }
 
   @Get()
-  findAll() {
-    return this.ordenesService.findAll();
+  async findAll() {
+    const ordenes = await this.ordenesService.findAll();    
+      if (ordenes.length === 0) { // Si no hay ordenes, lanzar una excepción 204 No Content
+          throw new HttpException('No Content', HttpStatus.NO_CONTENT); 
+      }
+        
+    return ordenes; // Devolver la lista de ordenes si existen y codigo 200 OK
   }
 
   @Get(':id')
