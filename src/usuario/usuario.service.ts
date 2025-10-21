@@ -10,6 +10,32 @@ export class UsuarioService {
     private readonly usuariosRepository: Repository<Usuario>,
   ) {}
 
+  async registrar(datos: Partial<Usuario>){
+    const email = datos.email;
+    const contraseña = datos.contraseña;
+    const nombreCompleto = datos.nombreCompleto;
+    const fechaNacimiento = datos.fechaNacimiento;
+    const foto = datos.foto;
+
+    //Verificar si ya existe el usuario con ese mail
+    const usuarioExistente = await this.usuariosRepository.findOne({where: {email}})
+     if (usuarioExistente){
+      throw new BadRequestException ('El email ya esta registradoo')
+     }
+
+    //Crear nuevo usuario
+    const nuevoUsuario = this.usuariosRepository.create({
+      email,
+      contraseña,
+      nombreCompleto,
+      fechaNacimiento,
+      foto,
+    })
+
+    return this.usuariosRepository.save(nuevoUsuario);
+
+  }
+
   async actualizarPerfil(id: number, datos: Partial<Usuario>): Promise<Usuario> {
     const usuario = await this.usuariosRepository.findOneBy({ Id_usuario : id });
     if (!usuario) throw new NotFoundException('Usuario no encontrado');
