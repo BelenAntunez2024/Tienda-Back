@@ -10,6 +10,7 @@ export class UsuarioService {
     private readonly usuariosRepository: Repository<Usuario>,
   ) {}
 
+  //Registro
   async registrar(datos: Partial<Usuario>){
     const email = datos.email;
     const contraseña = datos.contraseña;
@@ -36,6 +37,35 @@ export class UsuarioService {
 
   }
 
+  //Login
+  async login (email: string, contraseña: string){
+    //Buscar el usuario por email
+    const usuario = await this.usuariosRepository.findOne({where: {email}})
+    if(!usuario){
+      throw new NotFoundException('El usuario no existe con este email')
+    }
+    //Comprar contraseñas
+    if(usuario.contraseña !== contraseña){
+      throw new BadRequestException('La contraseña es incorrecta')
+    }
+    //Ocultamos la contraseña antes de devolver el usuario
+    const { contraseña: _, ...usuarioSinContraseña } = usuario;
+    return usuarioSinContraseña;
+  }
+
+  //Obtener todos los usuarios
+  async listaUsuarios(): Promise<Usuario[]> {
+    return this.usuariosRepository.find();
+  }
+
+  //Obtener usuario por ID
+  async obtenerUsuario(id:number): Promise<Usuario>{ 
+    const usuario = await this.usuariosRepository.findOneBy({Id_usuario: id});
+    if(!usuario) throw new NotFoundException('Usuario no encontrado')
+      return usuario;
+  }
+
+  //Actualizar Perfil
   async actualizarPerfil(id: number, datos: Partial<Usuario>): Promise<Usuario> {
     const usuario = await this.usuariosRepository.findOneBy({ Id_usuario : id });
     if (!usuario) throw new NotFoundException('Usuario no encontrado');
@@ -56,7 +86,13 @@ export class UsuarioService {
 
     // Actualizar los campos que vengan en el body
     Object.assign(usuario, datos);
-
     return this.usuariosRepository.save(usuario);
+  }
+
+  //Eliminar Usuario
+  async eliminarUsuario(id: number): Promise<void>{
+    const usuario = await this.usuariosRepository.findOneBy({Id_usuario: id});
+    if (!usuario) throw new NotFoundException('Usuario no encontrado');
+    await this.usuariosRepository.remove(usuario);
   }
 }
