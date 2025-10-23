@@ -64,6 +64,25 @@ export class ProductoService {
     return this.productoRepository.save(productoActualizado);
   }
 
+  //restar stock de un producto, cuando el cliente realiza una compra
+  async actualizarStock(id: number, cantidad: number): Promise<Producto> {
+    //verificamos si el producto existe por id
+    const producto = await this.productoRepository.findOne({
+      where: {id_producto: id}
+    });
+    if (!producto) {
+      throw new NotFoundException(`El producto con id ${id} no fue encontrado.`);
+    }
+    //verificamos si hay suficiente stock
+    if (producto.stock < cantidad) {
+      throw new BadRequestException(`No hay suficiente stock del producto ${producto.nombre}.`);
+    }
+    //restamos el stock y guardamos los cambios en la base de datos
+    producto.stock -= cantidad;
+    return await this.productoRepository.save(producto);
+  }
+ 
+
   //eliminar un producto
   async remove(id: number) {
     await this.productoRepository.delete(id);

@@ -28,6 +28,10 @@ export class ProductoController {
   async update(@Param('id') id: number, @Body(new ValidationPipe({transform: true})) productoDto: ProductoDto): Promise<Producto> { //el ValidationPipe es para validar y transformar los datos entrantes - el transform: true es para transformar el id de string a number
     return this.productoService.update(id, productoDto);
   }
+  @Patch(':id/stock') //ruta para actualizar solo el stock
+  async restarStock(@Param('id') id: number, @Body('cantidad') cantidad: number): Promise<Producto> {
+    return this.productoService.actualizarStock(id, cantidad); //por defecto devuelve 200 OK
+  }
 
   @Delete(':id')
   async remove(@Param('id') id: number) {

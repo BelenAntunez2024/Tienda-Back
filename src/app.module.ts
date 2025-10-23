@@ -2,37 +2,29 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-<<<<<<< HEAD
-import { UsuariosModule } from './usuario/usuario.module';
 import { CorreoModule } from './correo/correo.module';
-=======
-import { UsuariosModule } from './usuarios/usuarios.module';
 import { ProductoModule } from './producto/producto.module';
 import { ItemOrdenesModule } from './item-ordenes/item-ordenes.module';
->>>>>>> origin/tablas-product-ordenes
+import { UsuariosModule } from './usuario/usuario.module';
+import { OrdenesModule } from './ordenes/ordenes.module';
+import { ClienteModule } from './cliente/cliente.module';
 
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-<<<<<<< HEAD
       url: "postgresql://postgres.epdmrxhnyuscqmarffmf:2025Wisteria@aws-1-us-east-1.pooler.supabase.com:6543/postgres",
-=======
-      url: 'postgresql://postgres.epdmrxhnyuscqmarffmf:2025Wisteria@aws-1-us-east-1.pooler.supabase.com:6543/postgres',
->>>>>>> origin/tablas-product-ordenes
       synchronize: true,
       autoLoadEntities: false,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
     UsuariosModule,
-<<<<<<< HEAD
-    CorreoModule
-=======
+    CorreoModule,
     ProductoModule,
-    ItemOrdenesModule
->>>>>>> origin/tablas-product-ordenes
+    ItemOrdenesModule,
+    OrdenesModule,
+    ClienteModule
   ],
   controllers: [AppController],
   providers: [AppService],

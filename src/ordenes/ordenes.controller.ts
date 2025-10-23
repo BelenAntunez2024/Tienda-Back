@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, HttpCode, UsePipes, ValidationPipe } from '@nestjs/common';
 import { OrdenesService } from './ordenes.service';
 import { OrdenesDto } from './dto/ordenes.dto';
 
@@ -9,6 +9,14 @@ export class OrdenesController {
   @Post()
   create(@Body() ordenesDto: OrdenesDto) {
     return this.ordenesService.create(ordenesDto);
+  }
+
+  @Post('/comprar')
+  @HttpCode(HttpStatus.CREATED) // Respuesta 201 en caso de éxito
+  @UsePipes(new ValidationPipe({ transform: true })) // Garantiza la validación
+  async procesarCompra(@Body() compra: { items: any[]; userId: number }) {
+      const ordenCreada = await this.ordenesService.procesarCompra(compra.items, compra.userId);
+      return ordenCreada;
   }
 
   @Get()
