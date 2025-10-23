@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, HttpCode } from '@nestjs/common';
 import { ProductoService } from './producto.service';
 import { ProductoDto } from './dto/producto.dto';
 import { Producto } from './entities/producto.entity';
@@ -32,5 +32,15 @@ export class ProductoController {
   @Delete(':id')
   async remove(@Param('id') id: number) {
     return this.productoService.remove(id);
+  }
+
+  //nueva ruta para validar el stock de un producto
+  @Post('validar-stock/:id')
+  @HttpCode(200) //esto lo que hace es que cambie a un 200 OK y no un 201 Created
+  async validarStock(
+    @Param('id') id: number,
+    @Body()body: { cantidadSolicitada: number },
+  ): Promise<{ mensaje: string }> {
+    return this.productoService.validarStock(id, body.cantidadSolicitada);
   }
 }

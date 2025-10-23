@@ -35,6 +35,7 @@ export class ProductoService {
     const existente = await this.productoRepository.findOne({
       where: {nombre: productoDto.nombre}
     });
+    
     if (existente) { //si ya existe, lanzamos una excepcion
       throw new NotFoundException(`El producto ${productoDto.nombre} ya existe.`);
     }
@@ -55,6 +56,8 @@ export class ProductoService {
     const producto = await this.productoRepository.findOne({
       where: {id_producto: id}
     });
+
+    //si no existe, se indica mediante un mensaje
     if (!producto) {
       throw new NotFoundException(`El producto con id ${id} no fue encontrado.`);
     }
@@ -63,9 +66,31 @@ export class ProductoService {
     const productoActualizado = this.productoRepository.merge(producto, productoDto);
     return this.productoRepository.save(productoActualizado);
   }
+  
 
   //eliminar un producto
   async remove(id: number) {
     await this.productoRepository.delete(id);
+  }
+
+  //este nuevo metodo lo que hace es validar el stock de los productos antes de que el usuario lo agregue al carrito - verifica si la cantidad solicitada es menor o igual al stock disponible
+  async validarStock(id: number, cantidadSolicitada: number): Promise<{mensaje: string}> { //el {mensaje: string} es para devolver un mensaje indicando si hay stock o no
+    //verificamos si el producto existe por su id
+    const producto = await this.productoRepository.findOne({
+      where: {id_producto: id}
+    });
+
+    //si no existe, lanzamos un mensaje indicando que no se ha encontrado el producto
+    if (!producto ) {
+      throw new NotFoundException(`El producto con id ${id} no fue encontrado.`);
+    }
+
+    //verificamos si el stock es suficiente, se indica mediante un mensaje
+    if (producto.stock < cantidadSolicitada) {
+    throw new BadRequestException(`Stock insuficiente. Stock disponible: ${producto.stock}`);
+    }
+
+    //si hay stock suficiente, devolvemos un mensaje indicando que hay stock
+    return {mensaje: 'Stock suficiente. Producto agregado al carrito.'};
   }
 }
