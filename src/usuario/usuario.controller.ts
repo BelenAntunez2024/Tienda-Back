@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsuariosService } from './usuario.service';
 import { UsuarioDto } from './dto/usuario.dto';
+import { Usuario } from './entities/usuario.entity';
 
 @Controller('usuarios')
 export class UsuariosController {
@@ -12,7 +13,7 @@ export class UsuariosController {
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Usuario[]> {
     return this.usuariosService.findAll();
   }
 

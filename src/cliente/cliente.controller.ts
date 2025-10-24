@@ -1,24 +1,25 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ClienteService } from './cliente.service';
 import { ClienteDto } from './dto/cliente.dto';
+import { Cliente } from './entities/cliente.entity';
 
 @Controller('cliente')
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
 
   @Post()
-  create(@Body() createClienteDto: ClienteDto) {
-    return this.clienteService.create(createClienteDto);
-  }
+  async create(@Body() clienteDto: ClienteDto) {
+      return this.clienteService.create(clienteDto);
+    }
 
   @Get()
   findAll() {
     return this.clienteService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.clienteService.findOne(+id);
+  @Get(':id') //el param es para obtener el id de la url
+  async findOne(@Param('id') id: number): Promise<Cliente | null> {
+    return this.clienteService.findOne(id);
   }
 
   @Patch(':id')

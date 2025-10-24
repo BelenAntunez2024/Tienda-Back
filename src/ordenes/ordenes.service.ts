@@ -21,7 +21,7 @@ export class OrdenesService {
   }
 
   findAll(): Promise<Ordenes[]> {
-    return this.ordenesRepository.find();
+    return this.ordenesRepository.find({ relations: ['cliente'] });
   }
 
   findOne(id: number) {
@@ -46,7 +46,7 @@ export class OrdenesService {
   }
 
 
-  async procesarCompra(item: CreateItemOrdeneDto[], userId: number): Promise<Ordenes> {
+  async procesarCompra(item: CreateItemOrdeneDto[], id_usuario: number): Promise<Ordenes> {
     
     try {
       const totalCalculado = await this.calcularTotal(item);
@@ -60,10 +60,15 @@ export class OrdenesService {
       // Actualizar Stock
       for (let i = 0; i < item.length; i++) {
         await this.productoService.actualizarStock(item[i].id_producto, item[i].cantidad_productos);
+      }
+      // Verificar que el cliente exista y usar la entidad real
+      const cliente = await this.ordenesRepository.manager.findOne(Cliente, { where: { Id_usuario: id_usuario } });
+      if (!cliente) {
+        throw new NotFoundException(`Cliente con ID ${id_usuario} no existe.`);
       }        
       // Crear Orden
       const nuevaOrden = this.ordenesRepository.create({
-        cliente: { id_usuario: userId } as Cliente, // Asignar solo el ID del cliente            
+        cliente, // Asignar solo el ID del cliente            
         total: totalCalculado,
         fecha: new Date(),
       });
