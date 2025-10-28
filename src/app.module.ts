@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsuariosModule } from './usuario/usuario.module';
 import { CorreoModule } from './correo/correo.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 
 @Module({
@@ -17,7 +19,9 @@ import { CorreoModule } from './correo/correo.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
     UsuariosModule,
-    CorreoModule
+    CorreoModule,
+    AuthModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],

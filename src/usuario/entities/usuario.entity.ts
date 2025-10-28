@@ -1,25 +1,29 @@
 import { Correo } from "src/correo/entities/correo.entity";
 import{Column, Entity, OneToMany, PrimaryGeneratedColumn, } from "typeorm"
 
+
 @Entity('usuario')
 export class Usuario {
     @PrimaryGeneratedColumn()
     Id_usuario: number;
 
     @Column()
-    nombreCompleto: string
+    nombreCompleto: string;
 
     @Column({unique: true})
-    email: string
+    email: string;
 
     @Column()
-    contraseña: string
+    contraseña: string;
 
     @Column({type: 'date', nullable: true })
     fechaNacimiento: Date
 
     @Column({nullable: true})
     foto: string;
+
+   /* @Column({ type: 'enum', default: Role.USER, enum: Role })
+    role: Role;*/
 
 
     @OneToMany(() => Correo, (correo) => correo.usuario)

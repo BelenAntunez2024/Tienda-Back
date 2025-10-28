@@ -2,6 +2,8 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class UsuarioService {
@@ -65,6 +67,12 @@ export class UsuarioService {
       return usuario;
   }
 
+  //Obtener usuario por Email (Registro/login)
+  async obtenerUsuarioPorEmail(email: string): Promise<Usuario | null> {
+    return await this.usuariosRepository.findOneBy({ email });
+    
+  }
+
   //Actualizar Perfil
   async actualizarPerfil(id: number, datos: Partial<Usuario>): Promise<Usuario> {
     const usuario = await this.usuariosRepository.findOneBy({ Id_usuario : id });
@@ -80,9 +88,9 @@ export class UsuarioService {
     }
 
     // Encriptar contraseña si se actualiza
-    /*if (datos.contraseña) {
+    if (datos.contraseña) {
       datos.contraseña = await bcrypt.hash(datos.contraseña, 10);
-    }*/
+      }
 
     // Actualizar los campos que vengan en el body
     Object.assign(usuario, datos);
