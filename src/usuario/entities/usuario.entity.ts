@@ -10,10 +10,10 @@ export class Usuario {
     @Column()
     nombreCompleto: string;
 
-    @Column({unique: true})
+    @Column({unique: true, nullable: false})
     email: string;
 
-    @Column()
+    @Column({nullable: false})
     contraseña: string;
 
     @Column({type: 'date', nullable: true })
@@ -22,8 +22,9 @@ export class Usuario {
     @Column({nullable: true})
     foto: string;
 
-   /* @Column({ type: 'enum', default: Role.USER, enum: Role })
-    role: Role;*/
+    //type: 'enum', default: Role.USER, enum: Role 
+    @Column({ default: 'usuario'})
+    role: string;
 
 
     @OneToMany(() => Correo, (correo) => correo.usuario)

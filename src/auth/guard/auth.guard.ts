@@ -16,7 +16,7 @@ async canActivate(context: ExecutionContext):Promise<boolean> {
       throw new UnauthorizedException();
     }
     try {
-      const payload = this.jwtService.verifyAsync(
+      const payload = await this.jwtService.verifyAsync(
         token,
       { secret: jwtConstants.secret});
       request.usuario = payload;

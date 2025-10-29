@@ -6,7 +6,6 @@ import { ConfigModule } from '@nestjs/config';
 import { UsuariosModule } from './usuario/usuario.module';
 import { CorreoModule } from './correo/correo.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 
 
 @Module({
@@ -21,7 +20,6 @@ import { UsersModule } from './users/users.module';
     UsuariosModule,
     CorreoModule,
     AuthModule,
-    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
