@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { ItemOrdenesService } from './item-ordenes.service';
 import { CreateItemOrdeneDto } from './dto/create-item-ordene.dto';
 import { UpdateItemOrdeneDto } from './dto/update-item-ordene.dto';
@@ -26,9 +26,11 @@ export class ItemOrdenesController {
   update(@Param('id') id: string, @Body() updateItemOrdeneDto: UpdateItemOrdeneDto) {
     return this.itemOrdenesService.update(+id, updateItemOrdeneDto);
   }
+  //elimina un solo item de orden
+  
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.itemOrdenesService.remove(+id);
+  @Delete('orden/:id')
+  eliminarOrden(@Param('id', ParseIntPipe) id: number) {
+    return this.itemOrdenesService.eliminarOrden(+id);
   }
 }

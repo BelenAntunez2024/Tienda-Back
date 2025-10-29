@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, HttpCode, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, HttpCode, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { OrdenesService } from './ordenes.service';
 import { OrdenesDto } from './dto/ordenes.dto';
+import { ItemOrdenesService } from 'src/item-ordenes/item-ordenes.service';
 
 @Controller('ordenes')
 export class OrdenesController {
-  constructor(private readonly ordenesService: OrdenesService) {}
+  constructor(
+    private readonly ordenesService: OrdenesService,
+  ) {}
 
   @Post()
   create(@Body() ordenesDto: OrdenesDto) {
@@ -39,8 +42,9 @@ export class OrdenesController {
     return this.ordenesService.update(+id, updateOrdeneDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ordenesService.remove(+id);
+  @Delete('/vaciar-carrito')
+  async vaciarCarrito() {
+    await this.ordenesService.vaciarCarrito();
+    return { message: 'Carrito vaciado exitosamente' };
   }
 }

@@ -7,15 +7,19 @@ import { ProductoService } from 'src/producto/producto.service';
 import { CreateItemOrdeneDto } from 'src/item-ordenes/dto/create-item-ordene.dto';
 import { ProductoDto } from 'src/producto/dto/producto.dto';
 import { Cliente } from 'src/cliente/entities/cliente.entity';
+import { ItemOrdenesService } from 'src/item-ordenes/item-ordenes.service';
+import { ItemOrden } from 'src/item-ordenes/entities/item-ordene.entity';
 
 @Injectable()
 export class OrdenesService {
   constructor(
         @InjectRepository(Ordenes)
         private readonly ordenesRepository: Repository<Ordenes>,
+        @InjectRepository(ItemOrden)
+        private readonly itemOrdenRepository: Repository<ItemOrden>,
         private readonly productoService: ProductoService,
+        private readonly itemOrdenesService: ItemOrdenesService,
     ) {}
-    
   create(ordenesDto: OrdenesDto) {
     return 'This action adds a new ordene';
   }
@@ -74,6 +78,18 @@ export class OrdenesService {
       });
       const guardarOrden = await this.ordenesRepository.save(nuevaOrden);
 
+      // Crear Items de Orden
+      for (let i = 0; i < item.length; i++) {
+
+        const itemDetalle = {
+          id_orden: guardarOrden.id_orden, 
+          id_producto: item[i].id_producto,
+          cantidad_productos: item[i].cantidad_productos,
+        };
+    
+        await this.itemOrdenesService.create(itemDetalle);
+      }
+
       return guardarOrden;
     } catch (error) {
       console.error('Error al procesar la compra:', error);
@@ -88,4 +104,15 @@ export class OrdenesService {
   remove(id: number) {
     return `This action removes a #${id} ordene`;
   }
+
+  async vaciarCarrito(): Promise<void> {
+    try {
+      await this.ordenesRepository.manager.transaction(async manager => {
+        // luego eliminar todas las órdenes
+await manager.query(`TRUNCATE TABLE "Ordenes" RESTART IDENTITY CASCADE;`);    });
+    } catch (error) {
+      console.error('Error durante la eliminación masiva de órdenes:', error);
+      throw error;
+    }
+}
 }

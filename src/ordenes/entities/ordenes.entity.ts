@@ -18,6 +18,7 @@ export class Ordenes {
     @JoinColumn({ name: "ID_usuario" }) 
     cliente: Cliente;
 
-    @OneToMany(() => ItemOrden, itemOrden => itemOrden.orden)
+    @OneToMany(() => ItemOrden, itemOrden => itemOrden.orden,
+    {onDelete: 'CASCADE',}) //
     itemOrdenes: ItemOrden[];
 }
