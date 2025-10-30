@@ -5,7 +5,7 @@ import { UsuarioDto } from 'src/usuario/dto/usuario.dto';
 import { RequestConUsuario } from './interface/request.int';
 import { Roles } from './decorators/roles.decorators';
 import { RolesGuard } from './guard/roles.guard';
-import { Role } from './enums/role.enum';
+import { Role } from '../common/enums/role.enum';
 import { Auth } from './decorators/auth.decorator';
 
 @Controller('auth')
@@ -39,7 +39,7 @@ export class AuthController {
     }*/
 
     @Get('perfil')
-    @Auth(Role.ADMIN)
+    @Auth(Role.USUARIO)
     perfil(@Req() req: RequestConUsuario,) {
         return this.authService.perfil(req.usuario);
     }

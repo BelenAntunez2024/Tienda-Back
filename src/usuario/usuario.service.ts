@@ -35,7 +35,13 @@ export class UsuarioService {
       foto,
     })
 
-    return this.usuariosRepository.save(nuevoUsuario);
+    const usuarioGuardado = await this.usuariosRepository.save(nuevoUsuario);
+    //excluimos la contraseña antes de devolver el usuario
+    const { contraseña: _, ...usuarioSinContraseña } = usuarioGuardado;
+    return usuarioSinContraseña;
+
+
+    //return this.usuariosRepository.save(nuevoUsuario);
 
   }
 
@@ -47,8 +53,8 @@ export class UsuarioService {
       throw new NotFoundException('El usuario no existe con este email')
     }
     //Comprar contraseñas con bcrypt
-    const contraseñaValida =await bcryptjs.compare(contraseña, usuario.contraseña);
-    if(!contraseñaValida){
+    const contraseñaValida = await bcryptjs.compare(contraseña, usuario.contraseña);
+    if (!contraseñaValida) {
       throw new BadRequestException('La contraseña es incorrecta');
     }
     /*if (usuario.contraseña !== contraseña) {
@@ -75,7 +81,15 @@ export class UsuarioService {
   //Obtener usuario por Email (Registro/login)
   async obtenerUsuarioPorEmail(email: string): Promise<Usuario | null> {
     return await this.usuariosRepository.findOneBy({ email });
+    //buscamos por la propiedad: email
+  }
 
+  //Obtener usuario por Email y Contraseña (como una query/consulta personalizada - no es sql) - este método específico se hace dado que en la entity se le ha puesto select:false para que no traiga la contraseña
+  async obtenerUsuarioPorEmailConContraseña(email: string) {
+    return this.usuariosRepository.findOne({
+      where: { email }, //condicion: busca cuando el email coincida
+      select: ['Id_usuario', 'nombreCompleto', 'email', 'contraseña', 'role'], //y ademas trae estos datos
+    });
   }
 
   //Actualizar Perfil

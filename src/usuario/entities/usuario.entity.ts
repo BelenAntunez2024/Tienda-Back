@@ -1,5 +1,6 @@
+import { Role } from "../../common/enums/role.enum";
 import { Correo } from "src/correo/entities/correo.entity";
-import{Column, Entity, OneToMany, PrimaryGeneratedColumn, } from "typeorm"
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, } from "typeorm"
 
 
 @Entity('usuario')
@@ -10,21 +11,21 @@ export class Usuario {
     @Column()
     nombreCompleto: string;
 
-    @Column({unique: true, nullable: false})
+    @Column({ unique: true, nullable: false })
     email: string;
 
-    @Column({nullable: false})
+    //el select: false es para que no devuelva la contraseña
+    @Column({ nullable: false, select: false })
     contraseña: string;
 
-    @Column({type: 'date', nullable: true })
+    @Column({ type: 'date', nullable: true })
     fechaNacimiento: Date
 
-    @Column({nullable: true})
+    @Column({ nullable: true })
     foto: string;
 
-    //type: 'enum', default: Role.USER, enum: Role 
-    @Column({ default: 'usuario'})
-    role: string;
+    @Column({ type: 'enum', enumName: 'role', enum: Role, default: Role.USUARIO })
+    role: Role;
 
 
     @OneToMany(() => Correo, (correo) => correo.usuario)

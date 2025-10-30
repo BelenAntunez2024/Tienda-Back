@@ -27,7 +27,7 @@ export class AuthService {
     }
 
     async login(usuarioDto: UsuarioDto){
-        const usuario = await this.usuarioService.obtenerUsuarioPorEmail(usuarioDto.email);
+        const usuario = await this.usuarioService.obtenerUsuarioPorEmailConContraseña(usuarioDto.email);
         if(!usuario){//aca deberia ponerse lo del email incorrecto
             throw new UnauthorizedException('El usuario no existe');
         } 
