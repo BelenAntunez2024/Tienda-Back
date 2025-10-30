@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ProductoModule } from './producto/producto.module';
+import { ItemOrdenesModule } from './item-ordenes/item-ordenes.module';
 import { UsuariosModule } from './usuario/usuario.module';
 import { CorreoModule } from './correo/correo.module';
 import { AuthModule } from './auth/auth.module';
+import { OrdenesModule } from './ordenes/ordenes.module';
+import { ClienteModule } from './cliente/cliente.module';
 
 
 @Module({
@@ -20,6 +23,10 @@ import { AuthModule } from './auth/auth.module';
     UsuariosModule,
     CorreoModule,
     AuthModule,
+    ProductoModule,
+    ItemOrdenesModule,
+    OrdenesModule,
+    ClienteModule
   ],
   controllers: [AppController],
   providers: [AppService],

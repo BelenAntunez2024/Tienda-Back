@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, ParseEnumPipe, BadRequestException } from '@nestjs/common';
 import { CorreoService } from './correo.service';
 import { CorreoDto } from './dto/correo.dto';
+import { Correo } from './entities/correo.entity';
+import { ClasificacionMensaje } from './clasificacion-mensaje.enum';
 
 @Controller('correo')
 export class CorreoController {
   constructor(private readonly correoService: CorreoService) {}
 
-  @Post()
-  create(@Body() correoDto: CorreoDto) {
-    return this.correoService.create(CorreoDto);
+  @Post() //el validation verifica que los datos enviados cumplan con las reglas definidas en el DTO
+  create(@Body(new ValidationPipe({ whitelist: true })) correoDto: CorreoDto): Promise<Correo> {
+    return this.correoService.create(correoDto);
   }
 
   @Get()
@@ -16,14 +18,22 @@ export class CorreoController {
     return this.correoService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.correoService.findOne(+id);
-  }
+  //el parseenumpipe valida que el valor del parámetro coincida con uno de los valores definidos en el enum
+  @Get('/categoria/:clasificacion')
+    filtrarTipoDeMensaje(
+      @Param('clasificacion', new ParseEnumPipe(ClasificacionMensaje)) clasificacion: ClasificacionMensaje,
+    ): Promise<Correo[]> {
+      try{
+        return this.correoService.filtrarTipoDeMensaje(clasificacion);
+      } catch (error) {
+        console.error('Error al filtrar los correos por clasificación:', error);
+        throw BadRequestException;
+      }
+    }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() correoDto: CorreoDto) {
-    return this.correoService.update(+id, CorreoDto);
+    return this.correoService.update(+id, correoDto);
   }
 
   @Delete(':id')

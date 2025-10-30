@@ -1,23 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Param } from '@nestjs/common';
 import { CorreoDto } from './dto/correo.dto';
+import { Correo } from './entities/correo.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ClasificacionMensaje } from './clasificacion-mensaje.enum';
 
 @Injectable()
 export class CorreoService {
-  create(correoDto: CorreoDto) {
-    return 'This action adds a new correo';
+
+  constructor(
+    @InjectRepository(Correo)
+      private readonly correoRepository: Repository<Correo>,
+  ){}
+
+  async create(correoDto: CorreoDto): Promise<Correo> {
+    const newCorreo = this.correoRepository.create(correoDto);
+    return this.correoRepository.save(newCorreo);
+  }
+ 
+  findAll(): Promise<Correo[]> {
+    return this.correoRepository.find();
   }
 
-  findAll() {
-    return `This action returns all correo`;
+  //Filtra los correos por su clasificación (consulta, reclamo, otra)
+  async filtrarTipoDeMensaje(clasificacion: ClasificacionMensaje): Promise<Correo[]> {
+    
+      return this.correoRepository.find({
+        where: {
+          clasificacion_mjs: clasificacion,
+        },
+      });  
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} correo`;
-  }
 
   update(id: number, correoDto: CorreoDto) {
     return `This action updates a #${id} correo`;
   }
+
 
   remove(id: number) {
     return `This action removes a #${id} correo`;

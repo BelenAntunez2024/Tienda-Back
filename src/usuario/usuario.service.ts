@@ -9,6 +9,7 @@ import * as bcryptjs from 'bcryptjs';
 export class UsuarioService {
   constructor(
     @InjectRepository(Usuario)
+    //el injectRepository lo que hace es decirle a nest que quiero usar la tabla Producto
     private readonly usuariosRepository: Repository<Usuario>,
   ) { }
 
