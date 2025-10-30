@@ -1,15 +1,24 @@
 import { Usuario } from "src/usuario/entities/usuario.entity";
 import {Column, Entity, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
+import { ClasificacionMensaje } from "../clasificacion-mensaje.enum";
+
 @Entity("correo")
 export class Correo {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({
+        type: 'enum', //solo permite valores predefinidos
+        enum: ClasificacionMensaje,
+        nullable: false
+    })   
     clasificacion_mjs: string;
 
-    @Column()
-    mensaje: number;
+    @Column({nullable: false})
+    mensaje: string;
+
+    @Column({unique: true, nullable: false})
+    email: string;
 
     @ManyToMany(()=> Usuario, (usuario) => usuario.correos)
     usuario: Usuario

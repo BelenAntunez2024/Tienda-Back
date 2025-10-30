@@ -108,8 +108,8 @@ export class OrdenesService {
   async vaciarCarrito(): Promise<void> {
     try {
       await this.ordenesRepository.manager.transaction(async manager => {
-        // luego eliminar todas las órdenes
-await manager.query(`TRUNCATE TABLE "Ordenes" RESTART IDENTITY CASCADE;`);    });
+      await manager.query(`TRUNCATE TABLE "Ordenes" RESTART IDENTITY CASCADE;`);    
+      });
     } catch (error) {
       console.error('Error durante la eliminación masiva de órdenes:', error);
       throw error;
