@@ -1,6 +1,7 @@
+import { Cliente } from "src/cliente/entities/cliente.entity";
 import { Role } from "../../common/enums/role.enum";
 import { Correo } from "src/correo/entities/correo.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, } from "typeorm"
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, } from "typeorm"
 
 
 @Entity('usuario')
@@ -29,6 +30,9 @@ export class Usuario {
 
 
     @OneToMany(() => Correo, (correo) => correo.usuario)
-    correos: Correo[]
+    correos: Correo[];
+    
+    @OneToOne(() => Cliente, (cliente) => cliente.usuario)
+    cliente: Cliente;
 }
 

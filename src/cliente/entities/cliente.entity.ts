@@ -21,7 +21,7 @@ export class Cliente {
     @Column({ name: 'F_Nacimiento', type: 'date' }) //hace que se mapee  exac. el nombre de la columna en la bd
     F_nacimiento: Date;
 
- 
+
     //lado dueño de la relación(por tener la FK)
     @OneToOne(() => Usuario, (usuario) => usuario.cliente)
     @JoinColumn({

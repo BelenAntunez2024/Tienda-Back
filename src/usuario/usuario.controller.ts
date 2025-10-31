@@ -2,6 +2,8 @@ import { Controller, Put, Body, Param, Post, HttpCode, HttpStatus, Get, Delete }
 import { UsuarioService } from './usuario.service';
 import { Usuario } from './entities/usuario.entity';
 import { UsuarioDto } from './dto/usuario.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Role } from 'src/common/enums/role.enum';
 
 
 @Controller('usuario')
@@ -27,11 +29,14 @@ export class UsuarioController {
   }
 
   //Lista todos los usuarios
+  @Auth(Role.ADMIN)//esto hace que solo los usuarios con role de admin puedan hacer las operaciones en productos
   @Get()
   async listaUsuarios() {
     return this.usuarioService.listaUsuarios();
   }
+  
   //Obtener usuario por ID
+  @Auth(Role.ADMIN)//esto hace que solo los usuarios con role de admin puedan hacer las operaciones en productos
   @Get(':id')
   async obtenerUsuario(@Param('id') id: number){
     return this.usuarioService.obtenerUsuario(id);

@@ -1,4 +1,4 @@
-import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Usuario } from "../../usuario/entities/usuario.entity";
 import {Column, Entity, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
 import { ClasificacionMensaje } from "../clasificacion-mensaje.enum";
 

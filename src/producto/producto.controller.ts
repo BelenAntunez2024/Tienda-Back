@@ -2,7 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } fro
 import { ProductoService } from './producto.service';
 import { ProductoDto } from './dto/producto.dto';
 import { Producto } from './entities/producto.entity';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { Role } from '../common/enums/role.enum';
 
+@Auth(Role.ADMIN)//esto hace que solo los usuarios con role de admin puedan hacer las operaciones en productos
 @Controller('producto')
 export class ProductoController {
   constructor(private readonly productoService: ProductoService) {}

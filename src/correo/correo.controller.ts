@@ -3,7 +3,11 @@ import { CorreoService } from './correo.service';
 import { CorreoDto } from './dto/correo.dto';
 import { Correo } from './entities/correo.entity';
 import { ClasificacionMensaje } from './clasificacion-mensaje.enum';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { Role } from '../common/enums/role.enum';
 
+
+@Auth(Role.ADMIN)//esto hace que solo los usuarios con role de admin puedan hacer las operaciones en productos
 @Controller('correo')
 export class CorreoController {
   constructor(private readonly correoService: CorreoService) {}

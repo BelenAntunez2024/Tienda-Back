@@ -7,6 +7,8 @@ import { Roles } from './decorators/roles.decorators';
 import { RolesGuard } from './guard/roles.guard';
 import { Role } from '../common/enums/role.enum';
 import { Auth } from './decorators/auth.decorator';
+import { ActiveUsuario } from 'src/common/decorators/active-usuario.decorator';
+import { AactiveUsuarioInterface } from 'src/common/interface/usuario-active.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -40,8 +42,9 @@ export class AuthController {
 
     @Get('perfil')
     @Auth(Role.USUARIO)
-    perfil(@Req() req: RequestConUsuario,) {
-        return this.authService.perfil(req.usuario);
+    perfil(@ActiveUsuario() usuario: AactiveUsuarioInterface) {
+        console.log(usuario);
+        return this.authService.perfil(usuario);
     }
 
 
