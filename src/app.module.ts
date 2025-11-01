@@ -9,13 +9,20 @@ import { CorreoModule } from './correo/correo.module';
 import { AuthModule } from './auth/auth.module';
 import { OrdenesModule } from './ordenes/ordenes.module';
 import { ClienteModule } from './cliente/cliente.module';
+import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
   imports: [
+    //el config module permite usar variables de entorno en toda la aplicacion
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: "postgresql://postgres.epdmrxhnyuscqmarffmf:2025Wisteria@aws-1-us-east-1.pooler.supabase.com:6543/postgres",
+      url: process.env.POSTGRES_DATABASE_URL, //esta es la variable de entorno que contiene la url de la base de datos
+      //"postgresql://postgres.epdmrxhnyuscqmarffmf:2025Wisteria@aws-1-us-east-1.pooler.supabase.com:6543/postgres",
       synchronize: true,
       autoLoadEntities: false,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
