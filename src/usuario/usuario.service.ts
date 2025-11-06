@@ -47,14 +47,14 @@ export class UsuarioService {
   }
 
   //Login
-  async login(email: string, contraseña: string) {
+  async login(email: string, password: string) {
     //Buscar el usuario por email
     const usuario = await this.usuariosRepository.findOne({ where: { email } })
     if (!usuario) {
       throw new NotFoundException('El usuario no existe con este email')
     }
     //Comprar contraseñas con bcrypt
-    const contraseñaValida = await bcryptjs.compare(contraseña, usuario.contraseña);
+    const contraseñaValida = await bcryptjs.compare(password, usuario.contraseña);
     if (!contraseñaValida) {
       throw new BadRequestException('La contraseña es incorrecta');
     }

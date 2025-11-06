@@ -4,6 +4,7 @@ import { Usuario } from './entities/usuario.entity';
 import { UsuarioDto } from './dto/usuario.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
+import { LoginDto } from './dto/login.dto';
 
 
 @Controller('usuario')
@@ -19,9 +20,9 @@ export class UsuarioController {
 
   ///Login
   @Post('Login')
-  async login(@Body() datos: {email: string, contraseña: string}){
+  async login(@Body() datos: LoginDto){
     const usuarioLogueado = await this.usuarioService.login(
-      datos.email, datos.contraseña);
+      datos.email, datos.password);
       return{
         mensaje: "Login Existoso",
         usuarioLogueado,

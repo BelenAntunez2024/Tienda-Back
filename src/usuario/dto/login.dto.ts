@@ -1,11 +1,7 @@
 import { IsString, MaxLength, MinLength, IsNotEmpty, IsDate, IsOptional, IsEmail, } from "class-validator";
 import { Transform } from "class-transformer";
 
-export class UsuarioDto {
-    @IsString()
-    @IsNotEmpty()
-    nombreCompleto: string;
-
+export class LoginDto {
     @IsEmail()
     @IsNotEmpty()
     email: string;
@@ -15,15 +11,5 @@ export class UsuarioDto {
     @IsNotEmpty()
     @MinLength(6)
     @MaxLength(10)
-    contraseña: string;
-
-    @Transform(({value}) => new Date(value))
-    @IsDate()
-    @IsNotEmpty()
-    fechaNacimiento: Date;
-
-    @IsOptional()
-    foto?: string;
-
-
+    password: string;
 }
