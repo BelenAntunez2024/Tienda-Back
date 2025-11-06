@@ -16,7 +16,7 @@ export class UsuarioService {
   //Registro
   async registrar(datos: Partial<Usuario>) {
     const email = datos.email;
-    const contraseña = datos.contraseña;
+    const contraseña = datos.contraseña; //cambiar todas las contraseña a password
     const nombreCompleto = datos.nombreCompleto;
     const fechaNacimiento = datos.fechaNacimiento;
     const foto = datos.foto;

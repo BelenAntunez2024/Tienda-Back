@@ -17,11 +17,12 @@ export class AuthController {
         private readonly authService: AuthService,
     ) { }
 
-    @Post('registrar')
-    registrar(
+    @Post('registro')
+    registro(
         @Body()
         usuarioDto: UsuarioDto
     ) {
+        console.log(usuarioDto);
         return this.authService.registro(usuarioDto);
     }
 

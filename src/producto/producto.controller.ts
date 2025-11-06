@@ -10,6 +10,7 @@ import { Role } from '../common/enums/role.enum';
 export class ProductoController {
   constructor(private readonly productoService: ProductoService) {}
 
+
   @Get()
   async findAll(): Promise<Producto[]> {
     return this.productoService.findAll();

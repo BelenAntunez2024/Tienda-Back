@@ -2,6 +2,7 @@ import { IsString, MaxLength, MinLength, IsNotEmpty, IsDate, IsOptional, IsEmail
 import { Transform } from "class-transformer";
 
 export class UsuarioDto {
+    //hacer un dto de login seria similar pero solo con email y contraseña
     @IsString()
     @IsNotEmpty()
     nombreCompleto: string;
