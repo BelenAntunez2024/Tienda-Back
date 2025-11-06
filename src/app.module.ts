@@ -8,16 +8,27 @@ import { ItemOrdenesModule } from './item-ordenes/item-ordenes.module';
 import { UsuariosModule } from './usuario/usuario.module';
 import { OrdenesModule } from './ordenes/ordenes.module';
 import { ClienteModule } from './cliente/cliente.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: "postgresql://postgres.epdmrxhnyuscqmarffmf:2025Wisteria@aws-1-us-east-1.pooler.supabase.com:6543/postgres",
-      synchronize: true,
-      autoLoadEntities: false,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    // Carga las variables de entorno primero.
+    ConfigModule.forRoot({
+      isGlobal: true, // Hace que esté disponible en toda la app
+      envFilePath: '.env', // Ruta del archivo .env
+    }),
+
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule], // Asegura que ConfigModule esté disponible
+      useFactory: (configService: ConfigService) => ({//Usa ConfigService para obtener las variables de entorno
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),// Obtiene la URL de la base de datos desde las variables de entorno
+        synchronize: true,
+        autoLoadEntities: false,
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      }),
+      inject: [ConfigService],
     }),
     UsuariosModule,
     CorreoModule,
