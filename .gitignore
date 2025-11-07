@@ -2,6 +2,8 @@
 /dist
 /node_modules
 /build
+.env
+# se ignora la variable de entorno donde esta la url de la base de datos
 
 # Logs
 logs
