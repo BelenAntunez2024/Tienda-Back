@@ -12,6 +12,8 @@ export class Producto {
   precio:number;
   @Column({name: 'stock', type: 'int'})
   stock:number;
+  @Column({name: 'imagen', type: 'varchar', nullable: true})
+  imagen?:string; //agregardo como opcional
 
   @OneToMany(() => ItemOrden, itemOrden => itemOrden.producto)
   itemOrdenes: ItemOrden[];
