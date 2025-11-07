@@ -12,4 +12,7 @@ export class ProductoDto {
   @IsNumber()
   @IsNotEmpty()
   stock: number;
+
+  @IsString() //agregado como opcional
+  imagen?: string;
 }
