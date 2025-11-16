@@ -5,7 +5,7 @@ import { UsuarioDto } from './dto/usuario.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
 import { LoginDto } from './dto/login.dto';
-
+import { ActiveUsuario } from 'src/common/decorators/active-usuario.decorator'
 
 @Controller('usuario')
 export class UsuarioController {
@@ -44,9 +44,10 @@ export class UsuarioController {
   }
 
    //Actualizacion perfil
-  @Put(':id')
-  async actualizarPerfil(@Param('id') id: number, @Body() datos: Partial<Usuario>) {
-  const usuarioActualizado = await this.usuarioService.actualizarPerfil(id, datos);
+  @Auth(Role.USUARIO)
+  @Put(":id") 
+  async actualizarPerfil(@Param("id") id: number, @ActiveUsuario() usuario: Usuario, @Body() datos: Partial<Usuario>) {
+  const usuarioActualizado = await this.usuarioService.actualizarPerfil(usuario.Id_usuario, datos);
   return {
     mensaje: 'Perfil actualizado correctamente',
     usuario: usuarioActualizado,
