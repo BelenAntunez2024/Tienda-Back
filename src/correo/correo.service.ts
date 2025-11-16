@@ -4,6 +4,7 @@ import { Correo } from './entities/correo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClasificacionMensaje } from './clasificacion-mensaje.enum';
+import { EmailService } from './emailCorreo.service';
 
 @Injectable()
 export class CorreoService {
@@ -11,13 +12,20 @@ export class CorreoService {
   constructor(
     @InjectRepository(Correo)
       private readonly correoRepository: Repository<Correo>,
+      private readonly emailService: EmailService, // Agregar inyección
   ){}
 
   async create(correoDto: CorreoDto): Promise<Correo> {
     const newCorreo = this.correoRepository.create(correoDto);
-    return this.correoRepository.save(newCorreo);
+    const savedCorreo = await this.correoRepository.save(newCorreo);
+    
+    // Enviar notificación por email de forma asíncrona
+    this.emailService.sendContactNotification(correoDto)
+      .catch(error => console.error('Error en envío de email:', error));
+    
+    return savedCorreo;
   }
- 
+  
   findAll(): Promise<Correo[]> {
     return this.correoRepository.find();
   }
@@ -42,3 +50,5 @@ export class CorreoService {
     return `This action removes a #${id} correo`;
   }
 }
+
+

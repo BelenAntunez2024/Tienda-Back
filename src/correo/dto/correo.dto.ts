@@ -1,10 +1,12 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { ClasificacionMensaje } from "../clasificacion-mensaje.enum";
 
 export class CorreoDto {
 
     @IsString()
     @IsNotEmpty()
-    clasificacion_mjs: string;
+    @IsEnum(ClasificacionMensaje)
+    clasificacion_mjs: ClasificacionMensaje;
 
     @IsString()
     @IsNotEmpty()

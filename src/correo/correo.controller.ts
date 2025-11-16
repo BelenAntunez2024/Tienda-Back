@@ -7,7 +7,7 @@ import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from '../common/enums/role.enum';
 
 
-@Auth(Role.ADMIN)//esto hace que solo los usuarios con role de admin puedan hacer las operaciones en productos
+//@Auth(Role.ADMIN)//esto hace que solo los usuarios con role de admin puedan hacer las operaciones en productos
 @Controller('correo')
 export class CorreoController {
   constructor(private readonly correoService: CorreoService) {}
@@ -22,6 +22,7 @@ export class CorreoController {
     return this.correoService.findAll();
   }
 
+  @Auth(Role.ADMIN)
   //el parseenumpipe valida que el valor del parámetro coincida con uno de los valores definidos en el enum
   @Get('/categoria/:clasificacion')
     filtrarTipoDeMensaje(
