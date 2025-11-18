@@ -15,7 +15,7 @@ export class EmailService {
   async sendContactNotification(correoDto: CorreoDto): Promise<void> {
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: 'TiendaWisteria666@gmail.com',
+      to: 'TiendaWisteriaOficial@gmail.com',
       subject: `Nuevo mensaje de contacto: ${correoDto.clasificacion_mjs}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

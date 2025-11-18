@@ -3,7 +3,6 @@ import { ClasificacionMensaje } from "../clasificacion-mensaje.enum";
 
 export class CorreoDto {
 
-    @IsString()
     @IsNotEmpty()
     @IsEnum(ClasificacionMensaje)
     clasificacion_mjs: ClasificacionMensaje;
