@@ -9,6 +9,7 @@ import { Role } from '../common/enums/role.enum';
 import { Auth } from './decorators/auth.decorator';
 import { ActiveUsuario } from 'src/common/decorators/active-usuario.decorator';
 import { AactiveUsuarioInterface } from 'src/common/interface/usuario-active.interface';
+import { LoginDto } from 'src/usuario/dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,9 +30,9 @@ export class AuthController {
     @Post('login')
     login(
         @Body()
-        usuarioDto: UsuarioDto
+        loginDto: LoginDto
     ) {
-        return this.authService.login(usuarioDto);
+        return this.authService.login(loginDto);
     }
 
     /*@Get('perfil')

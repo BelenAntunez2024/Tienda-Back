@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { Expose, Transform } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateItemOrdeneDto {
   @IsNumber()
@@ -10,6 +11,12 @@ export class CreateItemOrdeneDto {
   cantidad_productos: number;
 
   @IsNumber()
-  @IsNotEmpty()
-  id_orden: number;
+  @IsOptional()
+  id_orden?: number;
+
+  @Expose({ name: 'Id_usuario' })
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  usuarioId: number;
+  
 }

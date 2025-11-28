@@ -2,7 +2,7 @@ import { Usuario } from "../../usuario/entities/usuario.entity";
 import {Column, Entity, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
 import { ClasificacionMensaje } from "../clasificacion-mensaje.enum";
 
-@Entity("correo")
+@Entity({name: 'correo'})
 export class Correo {
     @PrimaryGeneratedColumn()
     id: number;

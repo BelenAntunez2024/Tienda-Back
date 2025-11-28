@@ -1,8 +1,11 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
 import * as bcryptjs from 'bcryptjs';
+import { Cliente } from '../cliente/entities/cliente.entity';
+import { ClienteService } from '../cliente/cliente.service';
+import { UsuarioDto } from './dto/usuario.dto';
 
 
 @Injectable()
@@ -11,6 +14,8 @@ export class UsuarioService {
     @InjectRepository(Usuario)
     //el injectRepository lo que hace es decirle a nest que quiero usar la tabla Producto
     private readonly usuariosRepository: Repository<Usuario>,
+    private readonly dataSource: DataSource,
+    private readonly clienteService: ClienteService,
   ) { }
 
   //Registro
@@ -37,6 +42,16 @@ export class UsuarioService {
     })
 
     const usuarioGuardado = await this.usuariosRepository.save(nuevoUsuario);
+    //Crear cliente asociado al usuario
+    await this.clienteService.create({
+      usuarioId: usuarioGuardado.Id_usuario,
+      nombre: usuarioGuardado.nombreCompleto,
+      apellido: usuarioGuardado.nombreCompleto,
+      direccion: '',
+      F_nacimiento: usuarioGuardado.fechaNacimiento,
+    });
+
+
     //excluimos la contraseña antes de devolver el usuario
     const { contraseña: _, ...usuarioSinContraseña } = usuarioGuardado;
     return usuarioSinContraseña;
@@ -87,10 +102,12 @@ export class UsuarioService {
 
   //Obtener usuario por Email y Contraseña (como una query/consulta personalizada - no es sql) - este método específico se hace dado que en la entity se le ha puesto select:false para que no traiga la contraseña
   async obtenerUsuarioPorEmailConContraseña(email: string) {
-    return this.usuariosRepository.findOne({
+    const usuario = await this.usuariosRepository.findOne({
       where: { email }, //condicion: busca cuando el email coincida
       select: ['Id_usuario', 'nombreCompleto', 'email', 'contraseña', 'role'], //y ademas trae estos datos
     });
+    console.log(usuario);
+    return usuario;
   }
 
   //Actualizar Perfil

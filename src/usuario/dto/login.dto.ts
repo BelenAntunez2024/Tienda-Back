@@ -1,4 +1,4 @@
-import { IsString, MaxLength, MinLength, IsNotEmpty, IsDate, IsOptional, IsEmail, } from "class-validator";
+import { IsString, MaxLength, MinLength, IsNotEmpty, IsEmail, } from "class-validator";
 import { Transform } from "class-transformer";
 
 export class LoginDto {

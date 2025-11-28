@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants/jwt.constant';
 @Module({
   imports: [
-    UsuariosModule, 
+    UsuariosModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

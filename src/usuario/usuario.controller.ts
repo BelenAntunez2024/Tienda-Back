@@ -9,24 +9,24 @@ import { LoginDto } from './dto/login.dto';
 
 @Controller('usuario')
 export class UsuarioController {
-  constructor(private readonly usuarioService: UsuarioService) {}
+  constructor(private readonly usuarioService: UsuarioService) { }
 
   //Crear Usuario.
   @Post('registro')
   @HttpCode(HttpStatus.CREATED)
-  async registrar(@Body() datos: UsuarioDto | Partial<Usuario>){
+  async registrar(@Body() datos: UsuarioDto | Partial<Usuario>) {
     return this.usuarioService.registrar(datos);
   }
 
   ///Login
   @Post('Login')
-  async login(@Body() datos: LoginDto){
+  async login(@Body() datos: LoginDto) {
     const usuarioLogueado = await this.usuarioService.login(
       datos.email, datos.password);
-      return{
-        mensaje: "Login Existoso",
-        usuarioLogueado,
-      };
+    return {
+      mensaje: "Login Existoso",
+      usuarioLogueado,
+    };
   }
 
   //Lista todos los usuarios
@@ -35,32 +35,42 @@ export class UsuarioController {
   async listaUsuarios() {
     return this.usuarioService.listaUsuarios();
   }
-  
+
   //Obtener usuario por ID
   @Auth(Role.ADMIN)//esto hace que solo los usuarios con role de admin puedan hacer las operaciones en productos
   @Get(':id')
-  async obtenerUsuario(@Param('id') id: number){
+  async obtenerUsuario(@Param('id') id: number) {
     return this.usuarioService.obtenerUsuario(id);
   }
 
-   //Actualizacion perfil
+  //Actualizacion perfil
+  @Auth(Role.USUARIO)
   @Put(':id')
-  async actualizarPerfil(@Param('id') id: number, @Body() datos: Partial<Usuario>){
+  async actualizarPerfil(@Param('id') id: number, @Body() datos: Partial<Usuario>) {
     const usuarioActualizado = await this.usuarioService.actualizarPerfil(id, datos);
-    return{
+    return {
       mensaje: 'Perfil actualizado correctamente',
       usuario: usuarioActualizado
-    }
+    };
   }
+
+  /*
+  //Actualizacion perfil
+  @Auth(Role.USUARIO)
+  @Put(":id") 
+  async actualizarPerfil(@Param("id") id: number, @ActiveUsuario() usuario: Usuario, @Body() datos: Partial<Usuario>) {
+  const usuarioActualizado = await this.usuarioService.actualizarPerfil(usuario.Id_usuario, datos);
+  return {
+    mensaje: 'Perfil actualizado correctamente',
+    usuario: usuarioActualizado,
+  };
+  */
+
   //Eliminar usuario
+  @Auth(Role.USUARIO)
   @Delete(':id')
-  async eliminarUsuario(@Param('id') id:number){
+  async eliminarUsuario(@Param('id') id: number) {
     await this.usuarioService.eliminarUsuario(id);
-    return {mensaje: 'Usuario eliminado correctamente'}
+    return { mensaje: 'Usuario eliminado correctamente' };
   }
 }
-
-
-
-
-  

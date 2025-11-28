@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class ProductoDto {
   @IsString()
@@ -13,6 +13,12 @@ export class ProductoDto {
   @IsNotEmpty()
   stock: number;
 
+  @IsOptional()
   @IsString() //agregado como opcional
   imagen?: string;
+
+  @IsOptional()
+  @IsString() //agregado como opcional
+  descripcion?: string;
+
 }

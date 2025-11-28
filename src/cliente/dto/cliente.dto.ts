@@ -17,7 +17,7 @@ export class ClienteDto {
     @IsNotEmpty()
     F_nacimiento: Date;
     
-    @IsOptional()
     @IsNumber()
-    usuarioId?: number;
+    @IsNotEmpty()
+    usuarioId: number;
 }
