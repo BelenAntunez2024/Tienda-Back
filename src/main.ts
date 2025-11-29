@@ -12,6 +12,9 @@ async function bootstrap() {
     transform: true,
   }));
   
+  //cors para el frontend
+  app.enableCors({ origin: ['http://localhost:5173', 'https://multiply-thankful-tate.ngrok-free.dev'] });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

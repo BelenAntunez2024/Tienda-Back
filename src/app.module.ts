@@ -9,6 +9,7 @@ import { CorreoModule } from './correo/correo.module';
 import { AuthModule } from './auth/auth.module';
 import { OrdenesModule } from './ordenes/ordenes.module';
 import { ClienteModule } from './cliente/cliente.module';
+import { MercadoPagoModule } from './metodoDePago/mercadopago.module';
 import { ConfigModule } from '@nestjs/config';
 
 
@@ -33,7 +34,8 @@ import { ConfigModule } from '@nestjs/config';
     ProductoModule,
     ItemOrdenesModule,
     OrdenesModule,
-    ClienteModule
+    ClienteModule,
+    MercadoPagoModule
   ],
   controllers: [AppController],
   providers: [AppService],

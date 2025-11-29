@@ -4,6 +4,7 @@ import { CreateItemOrdeneDto } from './dto/create-item-ordene.dto';
 import { UpdateItemOrdeneDto } from './dto/update-item-ordene.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
+import { ActiveUsuario } from 'src/common/decorators/active-usuario.decorator';
 
 @Auth(Role.USUARIO)
 @Controller('item-ordenes')
@@ -11,14 +12,16 @@ export class ItemOrdenesController {
   constructor(private readonly itemOrdenesService: ItemOrdenesService) {}
 
   @Post()
-  create(@Body() createItemOrdeneDto: CreateItemOrdeneDto) {
+  create(@ActiveUsuario() usuario: any, @Body() createItemOrdeneDto: CreateItemOrdeneDto) {
     console.log(createItemOrdeneDto, "dto");
+    createItemOrdeneDto.usuarioId = usuario.id;
     return this.itemOrdenesService.create(createItemOrdeneDto);
   }
 
   @Get()
-  findAll() {
-    return this.itemOrdenesService.findAll();
+  @Auth(Role.USUARIO)
+  findAll(@ActiveUsuario() usuario: any) {
+    return this.itemOrdenesService.findAllByUser(usuario.id);
   }
 
   @Get('carrito/:id_user')

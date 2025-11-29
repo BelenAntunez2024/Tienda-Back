@@ -15,8 +15,8 @@ export class CreateItemOrdeneDto {
   id_orden?: number;
 
   @Expose({ name: 'Id_usuario' })
-  @Transform(({ value }) => Number(value))
+  @IsOptional()
   @IsInt()
-  usuarioId: number;
+  usuarioId?: number;
   
 }
