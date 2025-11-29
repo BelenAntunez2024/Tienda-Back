@@ -43,9 +43,6 @@ export class UsuarioController {
     return this.usuarioService.obtenerUsuario(id);
   }
 
-<<<<<<< HEAD
-   //Actualizacion perfil
-=======
   //Actualizacion perfil
   @Auth(Role.USUARIO)
   @Put(':id')
@@ -59,7 +56,6 @@ export class UsuarioController {
 
   /*
   //Actualizacion perfil
->>>>>>> 9a90d9866c55d800ba7925f6ead1b493e1bbc50d
   @Auth(Role.USUARIO)
   @Put(":id") 
   async actualizarPerfil(@Param("id") id: number, @ActiveUsuario() usuario: Usuario, @Body() datos: Partial<Usuario>) {
@@ -68,11 +64,7 @@ export class UsuarioController {
     mensaje: 'Perfil actualizado correctamente',
     usuario: usuarioActualizado,
   };
-<<<<<<< HEAD
-}
-=======
   */
->>>>>>> 9a90d9866c55d800ba7925f6ead1b493e1bbc50d
 
   //Eliminar usuario
   @Auth(Role.USUARIO)
