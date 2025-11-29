@@ -12,7 +12,6 @@ export class ItemOrdenesService {
   constructor(
     @InjectRepository(ItemOrden)
     private readonly itemOrdenRepository: Repository<ItemOrden>,
-    @InjectRepository(ProductoService)
     private readonly productoService: ProductoService,
   ) { }
 
@@ -25,12 +24,10 @@ export class ItemOrdenesService {
         throw new NotFoundException(`Producto con ID ${dto.id_producto} no existe`);
       }
       const nuevoItem = this.itemOrdenRepository.create({
+        id_producto: dto.id_producto,
+        Id_usuario: dto.usuarioId,
         cantidad_productos: dto.cantidad_productos,
-        // usa el nombre de la propiedad de la entidad
-        producto: { id: dto.id_producto } as any,
-        //agregado el null y ?
-        orden: dto.id_orden ? { id: dto.id_orden } as any : null,
-        usuario: { Id_usuario: dto.usuarioId } as any,
+        id_orden: dto.id_orden,
       });
 
       console.log('Guardando item:', nuevoItem);

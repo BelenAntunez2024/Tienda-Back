@@ -21,7 +21,7 @@ import { ConfigModule } from '@nestjs/config';
 
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.POSTGRES_DATABASE_URL, //esta es la variable de entorno que contiene la url de la base de datos
+      url: "postgresql://postgres.epdmrxhnyuscqmarffmf:2025Wisteria@aws-1-us-east-1.pooler.supabase.com:6543/postgres", //esta es la variable de entorno que contiene la url de la base de datos
       //"postgresql://postgres.epdmrxhnyuscqmarffmf:2025Wisteria@aws-1-us-east-1.pooler.supabase.com:6543/postgres",
       synchronize: true,
       autoLoadEntities: false,

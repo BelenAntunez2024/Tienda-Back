@@ -9,6 +9,7 @@ import { ProductoDto } from 'src/producto/dto/producto.dto';
 import { Cliente } from 'src/cliente/entities/cliente.entity';
 import { ItemOrdenesService } from 'src/item-ordenes/item-ordenes.service';
 import { ItemOrden } from 'src/item-ordenes/entities/item-ordene.entity';
+import { Producto } from 'src/producto/entities/producto.entity';
 
 @Injectable()
 export class OrdenesService {
@@ -16,7 +17,9 @@ export class OrdenesService {
     @InjectRepository(Ordenes)
     private readonly ordenesRepository: Repository<Ordenes>,
     @InjectRepository(ItemOrden)
-    //private readonly itemOrdenRepository: Repository<ItemOrden>,
+    private readonly itemOrdenRepository: Repository<ItemOrden>,
+    @InjectRepository(Producto)
+    private readonly productoRepository: Repository<Producto>,
     private readonly productoService: ProductoService,
     private readonly itemOrdenesService: ItemOrdenesService,
   ) { }
@@ -36,7 +39,20 @@ export class OrdenesService {
   async calcularTotal(item: CreateItemOrdeneDto[]): Promise<number> {
     let total = 0;
     for (let i = 0; i < item.length; i++) {
-      const producto = await this.productoService.findOne(item[i].id_producto);
+      console.log('Item en calcularTotal:', item[i]);
+      console.log('id_producto:', item[i].id_producto);
+      
+      if (!item[i].id_producto) {
+        throw new BadRequestException(`El item en posición ${i} no tiene id_producto válido`);
+      }
+      
+      // Buscar directamente en el repositorio
+      const producto = await this.productoRepository.findOne({ 
+        where: { id_producto: item[i].id_producto } 
+      });
+      
+      console.log('Producto encontrado:', producto);
+      
       // Verificar si el producto existe
       if (!producto) {
         throw new NotFoundException(`El producto con ID ${item[i].id_producto} no fue encontrado.`);
@@ -67,7 +83,8 @@ export class OrdenesService {
         await this.productoService.actualizarStock(item[i].id_producto, item[i].cantidad_productos);
       }
       // Verificar que el cliente exista y usar la entidad real
-      const cliente = await this.ordenesRepository.manager.findOne(Cliente, { where: { Id_usuario: Id_usuario } });
+      const clienteRepository = this.ordenesRepository.manager.getRepository(Cliente);
+      const cliente = await clienteRepository.findOne({ where: { Id_usuario: Id_usuario } });
       if (!cliente) {
         throw new NotFoundException(`Cliente con ID ${Id_usuario} no existe.`);
       }

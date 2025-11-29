@@ -8,11 +8,14 @@ export class ItemOrden {
   @PrimaryGeneratedColumn({ name: 'id_item_orden' })
   id_item_orden: number;
 
-  @Column({ name: 'id_producto', type: 'int' })
+  @Column({ name: 'id_producto', type: 'int', nullable: true })
   id_producto: number;
 
-  @Column({ name: 'Id_usuario', type: 'int' })  // Agrega de vuelta
+  @Column({ name: 'Id_usuario', type: 'int', nullable: true })  // Agrega de vuelta
   Id_usuario: number;
+
+  @Column({ name: 'id_orden', type: 'int', nullable: true })
+  id_orden: number;
 
   @Column({ name: 'cantidad_productos', type: 'int' })
   cantidad_productos: number;
