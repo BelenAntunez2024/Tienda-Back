@@ -1,9 +1,9 @@
-import { IsDate, IsNotEmpty, IsNumber} from "class-validator";
+import { IsDate, IsNotEmpty, IsNumber, IsOptional} from "class-validator";
 
 export class OrdenesDto {
     @IsNumber()
     @IsNotEmpty()
-    id_orden: number;
+    ID_orden: number;
     
     @IsNumber()
     @IsNotEmpty()
@@ -12,4 +12,7 @@ export class OrdenesDto {
     @IsDate()
     @IsNotEmpty()
     fecha: Date;
+
+    @IsOptional()
+    metodo_pago: string;
 }

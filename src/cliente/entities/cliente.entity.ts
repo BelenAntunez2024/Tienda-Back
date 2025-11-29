@@ -5,7 +5,7 @@ import { Entity, Column, OneToOne, JoinColumn, OneToMany, PrimaryColumn } from '
 @Entity('Cliente')
 export class Cliente {
     // Genera el ID automáticamente en la BD y mapea la columna real "ID_usuario"
-    @PrimaryColumn({ name: 'ID_usuario', type: 'int' })
+    @PrimaryColumn({ name: 'Id_usuario', type: 'int' })
     Id_usuario: number;
 
     // Propiedades en camelCase para coincidir con DTOs/requests, mapeadas a las columnas reales
@@ -25,7 +25,7 @@ export class Cliente {
     //lado dueño de la relación(por tener la FK)
     @OneToOne(() => Usuario, (usuario) => usuario.cliente)
     @JoinColumn({
-        name: 'ID_usuario', // FK en Cliente
+        name: 'Id_usuario', // FK en Cliente
         referencedColumnName: 'Id_usuario'
     })
     usuario: Usuario;

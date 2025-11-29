@@ -13,10 +13,11 @@ export class ClienteService {
     private clienteRepository: Repository<Cliente>,
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>
-  ) {}
+  ) { }
 
- async create(clienteDto: ClienteDto) {
+  async create(clienteDto: ClienteDto) {
     const cliente = this.clienteRepository.create({
+      Id_usuario: clienteDto.usuarioId,
       nombre: clienteDto.nombre,
       apellido: clienteDto.apellido,
       direccion: clienteDto.direccion,
@@ -39,10 +40,10 @@ export class ClienteService {
   async findAll(): Promise<Cliente[]> {
     return this.clienteRepository.find();
   }
-  
-  async findOne(id: number): Promise<Cliente|null> {//el null es por si no lo encuentra
-      return this.clienteRepository.findOne({where: {Id_usuario: id}});
-    }
+
+  async findOne(id: number): Promise<Cliente | null> {//el null es por si no lo encuentra
+    return this.clienteRepository.findOne({ where: { Id_usuario: id } });
+  }
 
   update(id: number, updateClienteDto: ClienteDto) {
     return `This action updates a #${id} cliente`;

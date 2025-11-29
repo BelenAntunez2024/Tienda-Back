@@ -14,6 +14,8 @@ export class Producto {
   stock:number;
   @Column({name: 'imagen', type: 'varchar', nullable: true})
   imagen?:string; //agregardo como opcional
+  @Column({name: 'descripcion', type: 'text', nullable: true})
+  descripcion?:string; //agregardo como opcional
 
   @OneToMany(() => ItemOrden, itemOrden => itemOrden.producto)
   itemOrdenes: ItemOrden[];

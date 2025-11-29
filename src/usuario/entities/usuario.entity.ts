@@ -2,9 +2,10 @@ import { Cliente } from "src/cliente/entities/cliente.entity";
 import { Role } from "../../common/enums/role.enum";
 import { Correo } from "src/correo/entities/correo.entity";
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, } from "typeorm"
+import { ItemOrden } from "src/item-ordenes/entities/item-ordene.entity";
 
 
-@Entity('usuario')
+@Entity({name: 'usuario'})
 export class Usuario {
     @PrimaryGeneratedColumn()
     Id_usuario: number;
@@ -20,7 +21,7 @@ export class Usuario {
     contraseña: string;
 
     @Column({ type: 'date', nullable: true })
-    fechaNacimiento: Date
+    fechaNacimiento: Date;
 
     @Column({ nullable: true })
     foto: string;
@@ -34,5 +35,8 @@ export class Usuario {
     
     @OneToOne(() => Cliente, (cliente) => cliente.usuario)
     cliente: Cliente;
+
+    @OneToMany(() => ItemOrden, (itemOrden) => itemOrden.usuario)
+    itemOrdenes: ItemOrden[];
 }
 
