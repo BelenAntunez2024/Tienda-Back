@@ -10,6 +10,11 @@ import { Role } from '../common/enums/role.enum';
 export class ProductoController {
   constructor(private readonly productoService: ProductoService) {}
 
+  @Get('filtrar-por-nombre') 
+  async search(@Query('nombre') nombre: string): Promise<Producto[]> {
+    return this.productoService.searchByName(nombre);
+  }
+
   @Auth(Role.USUARIO)
   @Get()
   async findAll(): Promise<Producto[]> {
