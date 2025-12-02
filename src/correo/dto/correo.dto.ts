@@ -1,9 +1,11 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { ClasificacionMensaje } from "../clasificacion-mensaje.enum";
 
 export class CorreoDto {
 
     @IsNotEmpty()
-    @IsEnum(['consulta', 'reclamo', 'otro'], { message: 'La clasificacion debe ser consulta, sugerencia, reclamo u otro' })
+    @IsEnum(ClasificacionMensaje)
+    //'consulta', 'reclamo', 'otra'], { message: 'La clasificacion debe ser consulta, sugerencia, reclamo u otra' })
     clasificacion_mjs: string;
 
     @IsString()

@@ -17,7 +17,7 @@ export class Correo {
     @Column({nullable: false})
     mensaje: string;
 
-    @Column({unique: true, nullable: false})
+    @Column()
     email: string;
 
     @ManyToMany(()=> Usuario, (usuario) => usuario.correos)
