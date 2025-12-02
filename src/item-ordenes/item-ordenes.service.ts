@@ -4,8 +4,7 @@ import { UpdateItemOrdeneDto } from './dto/update-item-ordene.dto';
 import { ItemOrden } from './entities/item-ordene.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull } from 'typeorm';
-import { ProductoService } from 'src/producto/producto.service';
-import { async } from 'rxjs';
+import { ProductoService } from '../producto/producto.service';
 
 @Injectable()
 export class ItemOrdenesService {

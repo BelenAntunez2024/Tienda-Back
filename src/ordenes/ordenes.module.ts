@@ -17,6 +17,7 @@ import { Producto } from 'src/producto/entities/producto.entity';
   ],
   controllers: [OrdenesController],
   providers: [OrdenesService],
+  exports: [OrdenesService]
 })
 export class OrdenesModule {}
 

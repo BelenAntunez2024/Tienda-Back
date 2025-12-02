@@ -18,6 +18,8 @@ import { ConfigModule } from '@nestjs/config';
     //el config module permite usar variables de entorno en toda la aplicacion
     ConfigModule.forRoot({
       isGlobal: true,
+
+
     }),
 
     TypeOrmModule.forRoot({

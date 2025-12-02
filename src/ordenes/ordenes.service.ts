@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ordenes } from './entities/ordenes.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { OrdenesDto } from './dto/ordenes.dto';
 import { ProductoService } from 'src/producto/producto.service';
 import { CreateItemOrdeneDto } from 'src/item-ordenes/dto/create-item-ordene.dto';
@@ -72,12 +72,6 @@ export class OrdenesService {
     try {
       const totalCalculado = await this.calcularTotal(item);
 
-      // Simulamos que el pago siempre es exitoso
-      /*const pagoExitoso = true;
-      if (!pagoExitoso) {
-        // Si el pago falla, lanzamos una excepción.
-        throw new BadRequestException('El pago no pudo ser procesado.');
-      }*/
       // Actualizar Stock
       for (let i = 0; i < item.length; i++) {
         await this.productoService.actualizarStock(item[i].id_producto, item[i].cantidad_productos);
@@ -118,6 +112,49 @@ export class OrdenesService {
     }
   }
 
+  async procesarCompraDesdeMP(userId: number, paymentId: string) {
+
+  // 1️⃣ Buscar carrito
+  const carrito = await this.itemOrdenRepository.find({
+    where: {
+      Id_usuario: userId,
+      orden: require('typeorm').IsNull()
+    }
+  });
+
+  if (!carrito.length) {
+    throw new BadRequestException("El carrito está vacío");
+  }
+
+  // 2️⃣ Convertir carrito al formato que usa procesarCompra()
+  const items: CreateItemOrdeneDto[] = carrito.map(item => ({
+    id_producto: item.id_producto,
+    cantidad_productos: item.cantidad_productos,
+    usuarioId: userId,
+    id_orden: undefined
+  }));
+
+  // 3️⃣ Ejecutar la lógica existente
+  const orden = await this.procesarCompra(items, userId);
+
+  // 4️⃣ Setear el id de pago y método de pago
+  orden.metodo_pago = 'mercado_pago';
+  await this.ordenesRepository.save(orden);
+
+  // ✅ LIMPIAMOS CARRITO SOLO AHORA
+  await this.vaciarCarrito(userId);
+
+  console.log("Orden creada desde MP:", orden.ID_orden);
+
+  return orden;
+}
+ async findByUser(id: number) {
+    return await this.ordenesRepository.find({
+      where: { cliente: { Id_usuario: id } },
+      relations: ['cliente', 'itemOrdenes', 'itemOrdenes.producto'],
+    });
+  }
+
   update(id: number, updateOrdenesDto: OrdenesDto) {
     return `This action updates a #${id} ordene`;
   }
@@ -126,7 +163,7 @@ export class OrdenesService {
     return `This action removes a #${id} ordene`;
   }
 
-  async vaciarCarrito(): Promise<void> {
+ /* async vaciarCarrito(): Promise<void> {
     try {
       await this.ordenesRepository.manager.transaction(async manager => {
         await manager.query(`TRUNCATE TABLE "Ordenes" RESTART IDENTITY CASCADE;`);
@@ -135,5 +172,12 @@ export class OrdenesService {
       console.error('Error durante la eliminación masiva de órdenes:', error);
       throw error;
     }
-  }
+  }*/
+  async vaciarCarrito(userId: number) {
+  await this.itemOrdenRepository.delete({
+    Id_usuario: userId,
+    id_orden: IsNull()
+  });
+}
+
 }

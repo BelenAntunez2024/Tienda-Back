@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Query } from '@nestjs/common';
 import { ProductoService } from './producto.service';
 import { ProductoDto } from './dto/producto.dto';
 import { Producto } from './entities/producto.entity';
@@ -15,7 +15,7 @@ export class ProductoController {
   async findAll(): Promise<Producto[]> {
     return this.productoService.findAll();
   }
-
+  
   @Auth(Role.USUARIO)
   @Get(':id') //el param es para obtener el id de la url
   async findOne(@Param('id') id: number): Promise<Producto | null> {

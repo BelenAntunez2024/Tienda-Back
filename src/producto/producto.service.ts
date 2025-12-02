@@ -18,14 +18,19 @@ export class ProductoService {
   async findAll(): Promise<Producto[]> {
     return this.productoRepository.find();
   }
-
   //obtener un producto por id
   async findOne(id: number): Promise<Producto | null> {//el null es por si no lo encuentra
-    console.log('ProductoService.findOne - ID recibido:', id, 'Tipo:', typeof id);
-    if (!id || typeof id !== 'number') {
+    if (!id || typeof id !== 'number'|| id <= 0 || !Number.isInteger(id)) {
       throw new BadRequestException(`ID de producto inválido: ${id}`);
     }
-    return this.productoRepository.findOne({ where: { id_producto: id } });
+    //console.log('ProductoService.findOne - ID recibido:', id, 'Tipo:', typeof id);
+    const producto = await this.productoRepository.findOne({ 
+      where: { id_producto: id } });
+    console.log('ProductoService.findOne - Producto encontrado:', producto, 
+      'Tipo:', typeof id);
+ 
+    
+    return producto;
   }
 
   //crear un nuevo producto y verificar si ya existe por nombre

@@ -18,16 +18,6 @@ export class OrdenesController {
   }
 
   @Auth(Role.USUARIO)
-  @Post('/comprar')
-  @HttpCode(HttpStatus.CREATED) // Respuesta 201 en caso de éxito
-  @UsePipes(new ValidationPipe({ transform: true })) // Garantiza la validación
-  async procesarCompra(@Body() compra: { items: any[]; Id_usuario: number }) {
-      const ordenCreada = await this.ordenesService.procesarCompra(compra.items, compra.Id_usuario);
-      return ordenCreada;
-  }
-
-
-  @Auth(Role.USUARIO)
   @Get()
   async findAll() {
     const ordenes = await this.ordenesService.findAll();    
@@ -49,11 +39,23 @@ export class OrdenesController {
   update(@Param('id') id: string, @Body() updateOrdeneDto: OrdenesDto) {
     return this.ordenesService.update(+id, updateOrdeneDto);
   }
-
+  
   @Auth(Role.USUARIO)
+  @Get('historial/:id')
+  findByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.ordenesService.findByUser(+id);
+  }
+
+  /*@Auth(Role.USUARIO)
   @Delete('/vaciar-carrito')
   async vaciarCarrito() {
     await this.ordenesService.vaciarCarrito();
     return { message: 'Carrito vaciado exitosamente' };
-  }
+  }*/
+  /*@Auth(Role.USUARIO)
+  @Delete('/vaciar-carrito')
+  async vaciarCarrito(@Body('userId', ParseIntPipe) userId: number) {
+    await this.ordenesService.vaciarCarrito(userId);
+    return { message: 'Carrito vaciado exitosamente' };
+  }*/
 }

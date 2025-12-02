@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Req } from '@nestjs/common';
 import { ItemOrdenesService } from './item-ordenes.service';
 import { CreateItemOrdeneDto } from './dto/create-item-ordene.dto';
 import { UpdateItemOrdeneDto } from './dto/update-item-ordene.dto';
@@ -47,5 +47,6 @@ export class ItemOrdenesController {
   @Delete('orden/:id')
   eliminarOrden(@Param('id', ParseIntPipe) id: number) {
     return this.itemOrdenesService.eliminarOrden(+id);
+    
   }
 }
