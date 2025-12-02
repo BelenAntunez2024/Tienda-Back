@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Producto } from './entities/producto.entity';
-import { Repository } from 'typeorm';
+import { Repository , Raw} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductoDto } from './dto/producto.dto';
 
@@ -12,6 +12,23 @@ export class ProductoService {
     //el injectRepository lo que hace es decirle a nest que quiero usar la tabla Producto
     private productoRepository: Repository<Producto>,
   ) { }
+
+
+async searchByName(nombre: string): Promise<Producto[]> {    
+    if (!nombre || nombre.trim() === '') {
+        // Devuelve todos los productos si no hay búsqueda
+        return this.productoRepository.find();
+    }
+    
+    const productosFiltrados = await this.productoRepository.find({
+        where: {
+            nombre: Raw(alias => `${alias} ILIKE '%${nombre}%'`),
+        }
+    });
+    return productosFiltrados;
+}
+
+  
 
   //metodos CRUD basicos
   //obtener todos los productos
@@ -48,8 +65,8 @@ export class ProductoService {
   }
 
   //para no violar el principio de responsabilidad unica extraigo estos metodos privados que se llaman en el metodo create:
-  private validarProductoDto(productoDto):void{
-      //validacion para que el nombre no este vacio o contener solo espacios y tampoco que se pase de el limite de 100 caracteres
+  private validarProductoDto(productoDto): void {
+    //validacion para que el nombre no este vacio o contener solo espacios y tampoco que se pase de el limite de 100 caracteres
     const nombreVacio = productoDto.nombre.trim();
     if (!nombreVacio) {
       throw new BadRequestException(`El nombre del producto no puede estar vacío o contener solo espacios.`);
@@ -74,7 +91,6 @@ export class ProductoService {
       throw new BadRequestException(`El stock no puede ser negativo.`);
     }
   }
-
 
   //actualizar un producto y verificar si existe
   async update(id: number, productoDto: ProductoDto): Promise<Producto> {
@@ -113,7 +129,6 @@ export class ProductoService {
     producto.stock -= cantidad;
     return await this.productoRepository.save(producto);
   }
-
 
   //eliminar un producto
   async remove(id: number) {
