@@ -15,13 +15,11 @@ export class ProductoController {
     return this.productoService.searchByName(nombre);
   }
 
-  @Auth(Role.USUARIO)
   @Get()
   async findAll(): Promise<Producto[]> {
     return this.productoService.findAll();
   }
   
-  @Auth(Role.USUARIO)
   @Get(':id') //el param es para obtener el id de la url
   async findOne(@Param('id') id: number): Promise<Producto | null> {
     return this.productoService.findOne(id);

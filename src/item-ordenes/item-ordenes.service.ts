@@ -57,7 +57,7 @@ export class ItemOrdenesService {
     update(id: number, updateItemOrdeneDto: UpdateItemOrdeneDto) {
       return this.itemOrdenRepository.update(id, updateItemOrdeneDto)
     }
-
+  
     //eliminar todos los productos de una orden
     eliminarOrden(idOrden: number) {
       return this.itemOrdenRepository.delete({ id_item_orden: idOrden });
