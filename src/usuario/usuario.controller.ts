@@ -45,26 +45,14 @@ export class UsuarioController {
 
   //Actualizacion perfil
   @Auth(Role.USUARIO)
-  @Put(':id')
-  async actualizarPerfil(@Param('id') id: number, @Body() datos: Partial<Usuario>) {
-    const usuarioActualizado = await this.usuarioService.actualizarPerfil(id, datos);
+  @Put()
+  async actualizarPerfil(@ActiveUsuario() usuario: Usuario, @Body() datos: Partial<Usuario>) {
+    const usuarioActualizado = await this.usuarioService.actualizarPerfil(usuario.Id_usuario, datos);
     return {
       mensaje: 'Perfil actualizado correctamente',
       usuario: usuarioActualizado
     };
   }
-
-  /*
-  //Actualizacion perfil
-  @Auth(Role.USUARIO)
-  @Put(":id") 
-  async actualizarPerfil(@Param("id") id: number, @ActiveUsuario() usuario: Usuario, @Body() datos: Partial<Usuario>) {
-  const usuarioActualizado = await this.usuarioService.actualizarPerfil(usuario.Id_usuario, datos);
-  return {
-    mensaje: 'Perfil actualizado correctamente',
-    usuario: usuarioActualizado,
-  };
-  */
 
   //Eliminar usuario
   @Auth(Role.USUARIO)

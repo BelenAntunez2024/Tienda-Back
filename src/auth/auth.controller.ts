@@ -34,14 +34,12 @@ export class AuthController {
     ) {
         return this.authService.login(loginDto);
     }
-
-    /*@Get('perfil')
-    @Roles(Role.USUARIO)
-    @UseGuards(AuthGuard, RolesGuard)
-    perfil(@Req() req: RequestConUsuario,) {
-        return this.authService.perfil(req.usuario);
-    }*/
-
+    
+    @Post('google-login')
+    async googleLogin(@Body() body: { credential: string }) {
+    return this.authService.googleLogin(body.credential);
+ }
+    
     @Get('perfil')
     @Auth(Role.USUARIO)
     perfil(@ActiveUsuario() usuario: AactiveUsuarioInterface) {

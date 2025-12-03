@@ -5,7 +5,6 @@ import { Usuario } from './entities/usuario.entity';
 import * as bcryptjs from 'bcryptjs';
 import { Cliente } from '../cliente/entities/cliente.entity';
 import { ClienteService } from '../cliente/cliente.service';
-import { UsuarioDto } from './dto/usuario.dto';
 
 
 @Injectable()
@@ -37,7 +36,7 @@ export class UsuarioService {
       email,
       contraseña,
       nombreCompleto,
-      fechaNacimiento,
+      fechaNacimiento: fechaNacimiento || new Date('2000-01-01'),
       foto,
     })
 
@@ -116,9 +115,9 @@ export class UsuarioService {
     if (!usuario) throw new NotFoundException('Usuario no encontrado');
 
     // Validaciones básicas
-    if (datos.nombreCompleto && datos.nombreCompleto.trim() === '') {
+   /* if (datos.nombreCompleto && datos.nombreCompleto.trim() === '') {
       throw new BadRequestException('El nombre no puede estar vacío');
-    }
+    }*/
 
     if (datos.contraseña && datos.contraseña.length < 6) {
       throw new BadRequestException('La contraseña debe tener al menos 6 caracteres');
