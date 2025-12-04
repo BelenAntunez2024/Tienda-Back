@@ -12,6 +12,7 @@ async canActivate(context: ExecutionContext):Promise<boolean> {
     console.log('Authorization Header:', request.headers.authorization);
 
     const token = this.extractTokenFromHeader(request);
+     console.log('Token extracted:', token); 
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -19,8 +20,10 @@ async canActivate(context: ExecutionContext):Promise<boolean> {
       const payload = await this.jwtService.verifyAsync(
         token,
       { secret: jwtConstants.secret});
+       console.log('Payload verified:', payload);
       request.usuario = payload;
-    } catch {
+    } catch(error) {
+      console.log('Error verifying token:', error.message);
       throw new UnauthorizedException();
     }
 
