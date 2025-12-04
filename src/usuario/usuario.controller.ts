@@ -43,17 +43,16 @@ export class UsuarioController {
     return this.usuarioService.obtenerUsuario(id);
   }
 
-  //Actualizacion perfil
+    //Actualizacion perfil
   @Auth(Role.USUARIO)
-  @Put()
-  async actualizarPerfil(@ActiveUsuario() usuario: Usuario, @Body() datos: Partial<Usuario>) {
-    const usuarioActualizado = await this.usuarioService.actualizarPerfil(usuario.Id_usuario, datos);
+  @Put(':id')
+  async actualizarPerfil(@Param('id') id: number, @Body() datos: Partial<Usuario>) {
+    const usuarioActualizado = await this.usuarioService.actualizarPerfil(id, datos);
     return {
       mensaje: 'Perfil actualizado correctamente',
       usuario: usuarioActualizado
     };
   }
-
   //Eliminar usuario
   @Auth(Role.USUARIO)
   @Delete(':id')

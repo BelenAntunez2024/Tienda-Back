@@ -114,10 +114,7 @@ export class UsuarioService {
     const usuario = await this.usuariosRepository.findOneBy({ Id_usuario: id });
     if (!usuario) throw new NotFoundException('Usuario no encontrado');
 
-    // Validaciones básicas
-   /* if (datos.nombreCompleto && datos.nombreCompleto.trim() === '') {
-      throw new BadRequestException('El nombre no puede estar vacío');
-    }*/
+   
 
     if (datos.contraseña && datos.contraseña.length < 6) {
       throw new BadRequestException('La contraseña debe tener al menos 6 caracteres');
