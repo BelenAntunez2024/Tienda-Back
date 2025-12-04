@@ -46,7 +46,8 @@ export class AuthService {
             email: usuario.email,
             role: usuario.role
         };
-        const token = await this.jwtService.signAsync(payload);
+        
+        const token = await this.jwtService.signAsync(payload, { expiresIn: '1h' });
 
         return {
             token,
