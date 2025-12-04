@@ -105,4 +105,3 @@ export class AuthService {
         return await this.usuarioService.obtenerUsuarioPorEmail(email);
     }
 }
-

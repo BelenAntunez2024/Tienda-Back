@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Req } from '@nestjs/common';
 import { ItemOrdenesService } from './item-ordenes.service';
-import { CreateItemOrdeneDto } from './dto/create-item-ordene.dto';
-import { UpdateItemOrdeneDto } from './dto/update-item-ordene.dto';
+import { ItemOrdeneDto } from './dto/item-ordene.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
 import { ActiveUsuario } from 'src/common/decorators/active-usuario.decorator';
@@ -12,10 +11,10 @@ export class ItemOrdenesController {
   constructor(private readonly itemOrdenesService: ItemOrdenesService) {}
 
   @Post()
-  create(@ActiveUsuario() usuario: any, @Body() createItemOrdeneDto: CreateItemOrdeneDto) {
-    console.log(createItemOrdeneDto, "dto");
-    createItemOrdeneDto.usuarioId = usuario.id;
-    return this.itemOrdenesService.create(createItemOrdeneDto);
+  create(@ActiveUsuario() usuario: any, @Body() ItemOrdenDto: ItemOrdeneDto) {
+    console.log(ItemOrdenDto, "dto");
+    ItemOrdenDto.usuarioId = usuario.id;
+    return this.itemOrdenesService.create(ItemOrdenDto);
   }
 
   @Get()
@@ -39,8 +38,8 @@ export class ItemOrdenesController {
 
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateItemOrdeneDto: UpdateItemOrdeneDto) {
-    return this.itemOrdenesService.update(+id, updateItemOrdeneDto);
+  update(@Param('id') id: string, @Body() ItemOrdeneDto: ItemOrdeneDto) {
+    return this.itemOrdenesService.update(+id,ItemOrdeneDto);
   }
 
   //elimina un solo item de orden

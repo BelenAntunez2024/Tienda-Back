@@ -4,7 +4,7 @@ import { Ordenes } from './entities/ordenes.entity';
 import { IsNull, Repository } from 'typeorm';
 import { OrdenesDto } from './dto/ordenes.dto';
 import { ProductoService } from 'src/producto/producto.service';
-import { CreateItemOrdeneDto } from 'src/item-ordenes/dto/create-item-ordene.dto';
+import { ItemOrdeneDto } from 'src/item-ordenes/dto/item-ordene.dto';
 import { ProductoDto } from 'src/producto/dto/producto.dto';
 import { Cliente } from 'src/cliente/entities/cliente.entity';
 import { ItemOrdenesService } from 'src/item-ordenes/item-ordenes.service';
@@ -36,7 +36,7 @@ export class OrdenesService {
     return `This action returns a #${id} ordene`;
   }
 
-  async calcularTotal(item: CreateItemOrdeneDto[]): Promise<number> {
+  async calcularTotal(item: ItemOrdeneDto[]): Promise<number> {
     let total = 0;
     for (let i = 0; i < item.length; i++) {
       console.log('Item en calcularTotal:', item[i]);
@@ -67,7 +67,7 @@ export class OrdenesService {
   }
 
 
-  async procesarCompra(item: CreateItemOrdeneDto[], Id_usuario: number): Promise<Ordenes> {
+  async procesarCompra(item: ItemOrdeneDto[], Id_usuario: number): Promise<Ordenes> {
 
     try {
       const totalCalculado = await this.calcularTotal(item);
@@ -127,7 +127,7 @@ export class OrdenesService {
   }
 
   // 2️⃣ Convertir carrito al formato que usa procesarCompra()
-  const items: CreateItemOrdeneDto[] = carrito.map(item => ({
+  const items: ItemOrdeneDto[] = carrito.map(item => ({
     id_producto: item.id_producto,
     cantidad_productos: item.cantidad_productos,
     usuarioId: userId,
@@ -163,16 +163,6 @@ export class OrdenesService {
     return `This action removes a #${id} ordene`;
   }
 
- /* async vaciarCarrito(): Promise<void> {
-    try {
-      await this.ordenesRepository.manager.transaction(async manager => {
-        await manager.query(`TRUNCATE TABLE "Ordenes" RESTART IDENTITY CASCADE;`);
-      });
-    } catch (error) {
-      console.error('Error durante la eliminación masiva de órdenes:', error);
-      throw error;
-    }
-  }*/
   async vaciarCarrito(userId: number) {
   await this.itemOrdenRepository.delete({
     Id_usuario: userId,

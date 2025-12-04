@@ -46,16 +46,4 @@ export class OrdenesController {
     return this.ordenesService.findByUser(+id);
   }
 
-  /*@Auth(Role.USUARIO)
-  @Delete('/vaciar-carrito')
-  async vaciarCarrito() {
-    await this.ordenesService.vaciarCarrito();
-    return { message: 'Carrito vaciado exitosamente' };
-  }*/
-  /*@Auth(Role.USUARIO)
-  @Delete('/vaciar-carrito')
-  async vaciarCarrito(@Body('userId', ParseIntPipe) userId: number) {
-    await this.ordenesService.vaciarCarrito(userId);
-    return { message: 'Carrito vaciado exitosamente' };
-  }*/
 }

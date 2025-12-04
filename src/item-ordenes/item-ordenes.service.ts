@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateItemOrdeneDto } from './dto/create-item-ordene.dto';
-import { UpdateItemOrdeneDto } from './dto/update-item-ordene.dto';
+import { ItemOrdeneDto } from './dto/item-ordene.dto';
 import { ItemOrden } from './entities/item-ordene.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull } from 'typeorm';
@@ -14,7 +13,7 @@ export class ItemOrdenesService {
     private readonly productoService: ProductoService,
   ) { }
 
-  async create(dto: CreateItemOrdeneDto) {
+  async create(dto: ItemOrdeneDto) {
     console.log("creandio item orden dto:", dto);
 
     try {
@@ -54,8 +53,8 @@ export class ItemOrdenesService {
       });
     }
 
-    update(id: number, updateItemOrdeneDto: UpdateItemOrdeneDto) {
-      return this.itemOrdenRepository.update(id, updateItemOrdeneDto)
+    update(id: number,ItemOrdeneDto: ItemOrdeneDto) {
+      return this.itemOrdenRepository.update(id, ItemOrdeneDto)
     }
   
     //eliminar todos los productos de una orden
