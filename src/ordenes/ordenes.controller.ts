@@ -16,6 +16,15 @@ export class OrdenesController {
   create(@Body() ordenesDto: OrdenesDto) {
     return this.ordenesService.create(ordenesDto);
   }
+  
+   @Auth(Role.USUARIO)
+  @Post('/comprar')
+  @HttpCode(HttpStatus.CREATED) //Respuesta 201 en caso de éxito
+  @UsePipes(new ValidationPipe({ transform: true })) //Garantiza la validación
+  async procesarCompra(@Body() compra: { items: any[]; Id_usuario: number }) {
+    const ordenCreada = await this.ordenesService.procesarCompra(compra.items, compra.Id_usuario);
+    return ordenCreada;
+  }
 
   @Auth(Role.USUARIO)
   @Get()
