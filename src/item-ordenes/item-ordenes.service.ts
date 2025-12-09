@@ -62,7 +62,10 @@ export class ItemOrdenesService {
       return this.itemOrdenRepository.delete({ id_item_orden: idOrden });
     }
 
-  async vaciarCarrito() {
-      return this.itemOrdenRepository.clear(); // Elimina todos los registros de la tabla
-    }
+  async vaciarCarrito(id: number) {
+    return this.itemOrdenRepository.delete({
+      usuario: { Id_usuario: id },
+      orden: IsNull(),
+    });
+  }
   }

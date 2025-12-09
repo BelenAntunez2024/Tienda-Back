@@ -34,8 +34,6 @@ export class ItemOrdenesController {
     return this.itemOrdenesService.findOne(+id);
   }
 
-  
-
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() ItemOrdeneDto: ItemOrdeneDto) {
@@ -47,5 +45,12 @@ export class ItemOrdenesController {
   eliminarOrden(@Param('id', ParseIntPipe) id: number) {
     return this.itemOrdenesService.eliminarOrden(+id);
     
+  }
+
+  //esto vacía TODO el carrito luego de que la orden haya sido realizada
+  @Delete('vaciar-carrito/:id')
+  async vaciar(@Param('id', ParseIntPipe) id: number) {
+    await this.itemOrdenesService.vaciarCarrito(id);
+    return { message: 'Carrito vaciado exitosamente' };
   }
 }
