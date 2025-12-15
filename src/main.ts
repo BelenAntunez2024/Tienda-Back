@@ -13,7 +13,7 @@ async function bootstrap() {
   }));
   
   //cors para el frontend
-  app.enableCors({ origin: ['http://localhost:5173','https://wisteriafront.onrender.com', 'https://multiply-thankful-tate.ngrok-free.dev'] });
+  app.enableCors({ origin: ['http://localhost:5173','https://wisteria-2cn8.onrender.com', 'https://multiply-thankful-tate.ngrok-free.dev'] });
 
   await app.listen(process.env.PORT ?? 3000);
 }
